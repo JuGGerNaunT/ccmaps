@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9.00"
+	Name="CNC Map Renderer"
+	ProjectGUID="{C63349C7-F9D0-4662-9BE8-6E61B6FC381B}"
+	RootNamespace="RA2MapRender"
+	Keyword="Win32Proj"
+	TargetFrameworkVersion="196613"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\cncmaprender.exe"
+				LinkIncremental="2"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				TargetMachine="1"
+				Profile="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="2"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				MinimalRebuild="true"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="false"
+				EnableFunctionLevelLinking="true"
+				FloatingPointModel="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\cncmaprender.exe"
+				LinkIncremental="2"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="VFS"
+			>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\archive.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\base64.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\blowfish.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\blowfish.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\CCRC.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\CCRC.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\decode.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\decode.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\dirarchive.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\dirarchive.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\File.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\File.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\INI_File.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\mixarchive.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\VFS.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\VFS.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\westwood_key.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\westwood_key.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="LZO"
+			>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\LZO\lzoconf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\LZO\minilzo.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\LZO\minilzo.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Misc"
+			>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\anyoption.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\anyoption.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Sources"
+			>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\csf.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\DrawingSurface.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\Lighting.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\LightSource.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\MapTypes.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\mixarchive.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\Palet.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\RA2_Map.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\SHP_Collection.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\SHP_File.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\Theater.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\TheaterDetails.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\TMP_Collection.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\TMP_File.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\VXL_File.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Headers"
+			>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\csf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\DrawingSurface.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\INI_File.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\Lighting.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\LightSource.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\MapTypes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\Palet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\RA2_Map.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\SHP_Collection.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\SHP_File.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\Theater.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\TheaterDetails.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\TMP_Collection.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\TMP_File.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\CNC Map Renderer\VXL_File.h"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\..\src\CNC Map Renderer\config.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\src\CNC Map Renderer\hva_file.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\src\CNC Map Renderer\hva_file.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\src\CNC Map Renderer\main.cpp"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
