@@ -154,7 +154,7 @@ void SHP_File::Draw(const int img, const int x, const int y, DrawingSurface& dst
 // No need for a palet
 // int* shadows tells us if we "shadowed" data at a certain pixel already,
 // This is, so that overlapping don't get darkened twice
-void SHP_File::Draw_Shadow(int img, const int x, const int y, const int height, DrawingSurface& dst) {
+void SHP_File::Draw_Shadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst) {
 	if (!initialized) Initialize();
 	// If there's shadow data, the latter half of all images form the shadows
 	// With 20 SHPS, image 9 would have shadow 9 + 20 / 2 = 19
@@ -290,31 +290,27 @@ void SHP_File::Set_YSort(int ysort) {
 	Y_Sort = ysort;
 }
 
-void SHP_Image::Draw(const int img, const int x, const int y, const int height, DrawingSurface& dst, const Palet* p) {
+void SHP_Image::Draw(const int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst, const Palet* p) {
 	for (vector< shared_ptr<SHP_File> >::iterator i = Images.begin(); i != Images.end(); i++) {
 		(*i)->Draw(img, x + x_offset, y + y_offset - height * 15, dst, p->Get_Colors());
 	}
 	for (vector< shared_ptr<VXL_File> >::iterator i = Voxels.begin(); i != Voxels.end(); i++) {
-		Palet p_unit(vfs.open("unittem.pal"));
-		p_unit.Set_Height(height);
-		p_unit.Recalculate();
-		(*i)->Draw(x + x_offset + (*i)->X_Offset, y + y_offset - height * 15 + (*i)->Y_Offset, 315, 0, dst, &p_unit);
-	}	
-
-	Draw_Shadow(img, x, y, height, dst);
+		(*i)->Draw(x + x_offset + (*i)->X_Offset, y + y_offset - height * 15 - (*i)->Y_Offset, direction, dst, p);
+	}
+	Draw_Shadow(img, x, y, height, direction, dst);
 	if (AlphaImage)
 		AlphaImage->DrawAlpha(0, x + x_offset, y + y_offset - height * 15, dst);
 }
 
-void SHP_Image::Draw_Shadow(int img, const int x, const int y, const int height, DrawingSurface& dst) {
+void SHP_Image::Draw_Shadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst) {
 	for (int i = 0; i < Images.size(); i++) {
 		if (Shadows[i]) {
-			Images[i]->Draw_Shadow(img, x + x_offset_shadow, y + y_offset_shadow - height * 15, height, dst);
+			Images[i]->Draw_Shadow(img, x + x_offset_shadow, y + y_offset_shadow - height * 15, height, direction, dst);
 		}
 	}
 }
 
-void SHP_Image::Draw_NoShadow(int img, const int x, const int y, const int height, DrawingSurface& dst, const Palet* p) {
+void SHP_Image::Draw_NoShadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst, const Palet* p) {
 	vector< shared_ptr<SHP_File> >::iterator i;
 	Palet p_unit(vfs.open("unittem.pal"));
 	for (int i = 0; i < Images.size(); i++) {
@@ -324,26 +320,26 @@ void SHP_Image::Draw_NoShadow(int img, const int x, const int y, const int heigh
 	}
 }
 
-void SHP_Image::Draw_Damaged(const int img, const int x, const int y, const int height, DrawingSurface& dst, const Palet* p) {
+void SHP_Image::Draw_Damaged(const int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst, const Palet* p) {
 	vector< shared_ptr<SHP_File> >::iterator i;
 	for (i = DamagedImages.begin(); i != DamagedImages.end(); i++) {
 		(*i)->Draw(img, x + x_offset, y + y_offset - height * 15, dst, p->Get_Colors());
 	}
-	Draw_Damaged_Shadow(img, x, y, height, dst);
+	Draw_Damaged_Shadow(img, x, y, height, direction, dst);
 	if (AlphaImage)
 		AlphaImage->DrawAlpha(0, x + x_offset, y + y_offset - height * 15, dst);
 	Draw_Fires(x, y - height * 15, dst);
 }
 
-void SHP_Image::Draw_Damaged_Shadow(int img, const int x, const int y, const int height, DrawingSurface& dst) {
+void SHP_Image::Draw_Damaged_Shadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst) {
 	for (int i = 0; i < DamagedImages.size(); i++) {
 		if (DamagedShadows[i]) {
-			DamagedImages[i]->Draw_Shadow(img, x + x_offset_shadow, y + y_offset_shadow - height * 15, height, dst);
+			DamagedImages[i]->Draw_Shadow(img, x + x_offset_shadow, y + y_offset_shadow - height * 15, height, direction, dst);
 		}
 	}
 }
 
-void SHP_Image::Draw_Damaged_NoShadow(int img, const int x, const int y, const int height, DrawingSurface& dst, const Palet* p) {
+void SHP_Image::Draw_Damaged_NoShadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst, const Palet* p) {
 	for (int i = 0; i < Images.size(); i++) {
 		DamagedImages[i]->Draw(img, x + x_offset_shadow, y + y_offset_shadow - height * 15, dst, p->Get_Colors());
 	}

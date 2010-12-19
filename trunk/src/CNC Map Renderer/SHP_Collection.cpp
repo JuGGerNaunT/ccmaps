@@ -1,5 +1,6 @@
 #include "SHP_Collection.h"
 #include "VXL_File.h"
+#include "HVA_File.h"
 
 #include <boost/lexical_cast.hpp>
 
@@ -277,7 +278,7 @@ void SHP_Collection::Add_File_To_Image(string ObjName, SHP_Type S, Theater_Type 
 			string img = ObjRules.read_string("TurretAnim");
 			img += ObjRules.read_bool("TurretAnimIsVoxel") ? ".vxl" : ".shp";
 			Do_Add(img, s_img, 0, false, ObjRules.read_bool("TurretAnimIsVoxel"), 
-				ObjRules.read_int("TurretAnimX"), ObjRules.read_int("TurretAnimY"));
+				ObjRules.read_int("TurretAnimX"), ObjRules.read_int("TurretAnimY") - ObjRules.read_double("TurretAnimZAdjust") / 128.0);
 		}
 	}
 	images.push_back(s_img);
@@ -326,10 +327,18 @@ void SHP_Collection::Do_Add(std::string image_filename, SHP_Image& s_img, int ys
 		}
 		else {
 			std::string hva = image_filename.substr(0, image_filename.length() - 4) + ".hva";
-			boost::shared_ptr<VXL_File> vxl(new VXL_File(vfs.open(image_filename), vfs.open(hva)));
-			vxl->Set_YSort(ysort);
-			vxl->Set_Offset(x_offset, y_offset);
-			s_img.Add_Voxel(vxl, shadow);
+			boost::shared_ptr<File> file_hva = vfs.open(hva);
+			boost::shared_ptr<File> file_vxl = vfs.open(image_filename);
+			if (file_hva && file_vxl) {
+				boost::shared_ptr<HVA_File> hva(new HVA_File(file_hva));
+				boost::shared_ptr<VXL_File> vxl(new VXL_File(file_vxl, hva));
+				vxl->Set_YSort(ysort);
+				vxl->Set_Offset(x_offset, -y_offset);
+				s_img.Add_Voxel(vxl, shadow);
+			}
+			else { 
+				int i = 0; 
+			}
 		}
 	}
 }
@@ -365,28 +374,28 @@ void SHP_Collection::Apply_New_Theater(string &image_filename, Theater_Type T) {
 	}
 }
 
-void SHP_Collection::Draw_SHP(int num, int sub, int x, int y, int z, DrawingSurface& dst, const Palet* p) {
-	images[num].Draw(sub, x, y, z, dst, p);
+void SHP_Collection::Draw_SHP(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst, const Palet* p) {
+	images[num].Draw(sub, x, y, z, direction, dst, p);
 }
 
-void SHP_Collection::Draw_SHP_Shadow(int num, int sub, int x, int y, int z, DrawingSurface& dst) {
-	images[num].Draw_Shadow(sub, x, y, z, dst);
+void SHP_Collection::Draw_SHP_Shadow(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst) {
+	images[num].Draw_Shadow(sub, x, y, z, direction, dst);
 }
 
-void SHP_Collection::Draw_SHP_NoShadow(int num, int sub, int x, int y, int z, DrawingSurface& dst, const Palet* p) {
-	images[num].Draw_NoShadow(sub, x, y, z, dst, p);
+void SHP_Collection::Draw_SHP_NoShadow(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst, const Palet* p) {
+	images[num].Draw_NoShadow(sub, x, y, z, direction, dst, p);
 }
 
-void SHP_Collection::Draw_Damaged_SHP(int num, int sub, int x, int y, int z, DrawingSurface& dst, const Palet* p) {
-	images[num].Draw_Damaged(sub, x, y, z, dst, p);
+void SHP_Collection::Draw_Damaged_SHP(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst, const Palet* p) {
+	images[num].Draw_Damaged(sub, x, y, z, direction, dst, p);
 }
 
-void SHP_Collection::Draw_Damaged_SHP_Shadow(int num, int sub, int x, int y, int z, DrawingSurface& dst) {
-	images[num].Draw_Damaged_Shadow(sub, x, y, z, dst);
+void SHP_Collection::Draw_Damaged_SHP_Shadow(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst) {
+	images[num].Draw_Damaged_Shadow(sub, x, y, z, direction, dst);
 }
 
-void SHP_Collection::Draw_Damaged_SHP_NoShadow(int num, int sub, int x, int y, int z, DrawingSurface& dst, const Palet* p) {
-	images[num].Draw_Damaged_NoShadow(sub, x, y, z, dst, p);
+void SHP_Collection::Draw_Damaged_SHP_NoShadow(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst, const Palet* p) {
+	images[num].Draw_Damaged_NoShadow(sub, x, y, z, direction, dst, p);
 }
 
 int SHP_Collection::Get_X_Offset(int idx) {

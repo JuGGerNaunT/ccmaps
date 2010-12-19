@@ -20,17 +20,17 @@ void DrawingSurface::Draw(const unsigned char* src, int sx, int sy, int src_stri
 	}
 }
 
-DrawingSurface::DrawingSurface() {
+DrawingSurface::DrawingSurface() {}
+
+DrawingSurface::DrawingSurface(int width, int height, int bpp) {
+	SetDimensions(width, height, bpp);
 }
 
-DrawingSurface::DrawingSurface(int width, int height) {
-	SetDimensions(width, height);
-}
-
-void DrawingSurface::SetDimensions(int width, int height) {
+void DrawingSurface::SetDimensions(int width, int height, int bpp) {
 	this->width = width;
 	this->height = height;
-	this->stride = (width * (24 / 8) + 3) & ~3;
+	this->bpp = bpp;
+	this->stride = (width * (bpp / 8) + 3) & ~3;
 	this->map = new unsigned char[height * stride];
 	this->shadows = new bool[height * width];
 	this->zorder = new int[height * width];
@@ -87,13 +87,14 @@ DrawingSurface::~DrawingSurface() {
 	delete[] zorder;
 }
 
-
-void DrawingSurface::SavePNG(const std::string& path, int compression, int left, int top, int width, int height) const {
+void DrawingSurface::SavePNG(const std::string& path, int compression, int left, int top, int width, int height, bool invert_rows) const {
 	png_bytep* row_pointers = new png_bytep[height];
+
 	for (int y = 0; y < height; y++) {
-		png_byte* row = new png_byte[width * 3];
+		png_byte* row = new png_byte[width * bpp / 8];
 		row_pointers[y] = row;
-		memcpy(row, map + stride * (y + top) + left * 3, width * 3);
+		memcpy(row, map + stride * (invert_rows ? (y + top) : (top + height - y - 1))
+			+ left * bpp / 8, width * bpp / 8);
 	}
 
 	FILE *fp = fopen(path.c_str(), "wb");
@@ -106,7 +107,9 @@ void DrawingSurface::SavePNG(const std::string& path, int compression, int left,
 	png_init_io(png_ptr, fp);
 	if (setjmp(png_jmpbuf(png_ptr))) return;
 	png_set_IHDR(png_ptr, info_ptr, width, height,
-		8, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
+		8, 
+		bpp == 24 ? PNG_COLOR_TYPE_RGB : PNG_COLOR_TYPE_RGBA, 
+		PNG_INTERLACE_NONE,
 		PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 	png_ptr->compression = compression;
 	png_write_info(png_ptr, info_ptr);
@@ -124,7 +127,7 @@ void DrawingSurface::SavePNG(const std::string& path, int compression, int left,
 	fclose(fp);
 }
 
-void DrawingSurface::SaveJPEG( const std::string& path, int quality, int left, int top, int width, int height ) const {
+void DrawingSurface::SaveJPEG( const std::string& path, int quality, int left, int top, int width, int height, bool invert_rows) const {
 	FILE* outfile = fopen(path.c_str(), "wb");
 
 	if (!outfile)
@@ -144,17 +147,31 @@ void DrawingSurface::SaveJPEG( const std::string& path, int quality, int left, i
 
 	jpeg_set_defaults(&cinfo);
 	// set the quality [0..100]
-	jpeg_set_quality (&cinfo, 75, true);
+	jpeg_set_quality(&cinfo, quality, true);
 	jpeg_start_compress(&cinfo, true);
 
+	// allocate buffer to store rows with alpha channel removed in if bpp is 32 (jpeg unsupported)
+	unsigned char* row = NULL;
+	if (bpp == 32) row = new unsigned char[3 * width];
+				
 	JSAMPROW row_pointer[1];
+
 	for (int y = 0; y < height; y++) {
-		row_pointer[0] = (JSAMPROW)(map + stride * (y + top) + 3 * left);
+		int rownum = invert_rows ? y : height - y - 1;
+		if (bpp == 24) 
+			row_pointer[0] = (JSAMPROW)(map + stride * (rownum + top) + 3 * left);
+		else {// copy row with alpha channels removed
+			for (int i = 0; i < width; i++)
+				memcpy(row + i * 3, map + stride * (rownum + top) + 4 * (left + i), 3);
+			row_pointer[0] = (JSAMPROW)row;
+		}
 		jpeg_write_scanlines(&cinfo, row_pointer, 1);
 	}
 
 	jpeg_finish_compress(&cinfo);
 	jpeg_destroy_compress(&cinfo);
+
+	if (bpp == 32) delete[] row;
 
 	fclose(outfile);
 }

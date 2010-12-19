@@ -111,11 +111,11 @@ void Theater::Recalculate_Palets() {
 }
 
 void Theater::Draw_Overlay(Overlay* O, DrawingSurface& dst) {
-	OverlayTypes.Draw_SHP(O->num, O->sub, O->X * 30, O->Y * 15, O->Z, dst, &O->P);
+	OverlayTypes.Draw_SHP(O->num, O->sub, O->X * 30, O->Y * 15, O->Z, 0, dst, &O->P);
 }
 
 void Theater::Draw_Overlay_Shadow(Overlay* O, DrawingSurface& dst) {
-	OverlayTypes.Draw_SHP_Shadow(O->num, O->sub, O->X * 30, O->Y * 15, O->Z, dst);
+	OverlayTypes.Draw_SHP_Shadow(O->num, O->sub, O->X * 30, O->Y * 15, O->Z, 0, dst);
 }
 
 void Theater::Draw_Overlay_NoShadow(Overlay* O, DrawingSurface& dst) {
@@ -125,19 +125,19 @@ void Theater::Draw_Overlay_NoShadow(Overlay* O, DrawingSurface& dst) {
 	if (O->num == 24 || O->num == 25 || O->num == 238 || O->num == 237) {
 		y_off = O->sub > 8 ? 16 : 1;
 	}
-	OverlayTypes.Draw_SHP_NoShadow(O->num, O->sub, O->X * 30, O->Y * 15 - y_off, O->Z, dst, &O->P);
+	OverlayTypes.Draw_SHP_NoShadow(O->num, O->sub, O->X * 30, O->Y * 15 - y_off, O->Z, 0, dst,&O->P);
 }
 
 void Theater::Draw_Smudge(Smudge* Smu, DrawingSurface& dst) {
 	int idx = SmudgeTypes.Get_Image_Index(Smu->name);
 	if (idx >= 0) {
-		SmudgeTypes.Draw_SHP(idx, 0, Smu->X * 30, Smu->Y * 15, Smu->Z, dst, &Smu->P);
+		SmudgeTypes.Draw_SHP(idx, 0, Smu->X * 30, Smu->Y * 15, Smu->Z, 0, dst, &Smu->P);
 	}
 }
 
 void Theater::Draw_Terrain(Terrain* T, DrawingSurface& dst) {
 	int idx = TerrainTypes.Get_Image_Index(T->name);
-	TerrainTypes.Draw_SHP(idx, 0, T->X * 30, T->Y* 15 + 15, T->Z, dst, &T->P);
+	TerrainTypes.Draw_SHP(idx, 0, T->X * 30, T->Y* 15 + 15, T->Z, 0, dst, &T->P);
 }
 
 void Theater::Draw_Structure(Structure* Str, DrawingSurface& dst) {
@@ -146,30 +146,37 @@ void Theater::Draw_Structure(Structure* Str, DrawingSurface& dst) {
 		idx = OverlayTypes.Get_Image_Index(Str->name);
 		if (idx != -1) {
 			if (Str->health > 128)
-				OverlayTypes.Draw_SHP(idx, 0, Str->X * 30, Str->Y * 15, Str->Z, dst, &Str->P);
+				OverlayTypes.Draw_SHP(idx, 0, Str->X * 30, Str->Y * 15, Str->Z, Str->direction, dst, &Str->P);
 			else
-				BuildingTypes.Draw_Damaged_SHP(idx, 1, Str->X * 30, Str->Y * 15, Str->Z, dst, &Str->P);
+				BuildingTypes.Draw_Damaged_SHP(idx, 1, Str->X * 30, Str->Y * 15, Str->Z, Str->direction, dst, &Str->P);
 		}
 	}
 	else {
 		if (Str->health > 128)
-			BuildingTypes.Draw_SHP(idx, 0, Str->X * 30, Str->Y * 15, Str->Z, dst, &Str->P);
+			BuildingTypes.Draw_SHP(idx, 0, Str->X * 30, Str->Y * 15, Str->Z, Str->direction, dst, &Str->P);
 		else
-			BuildingTypes.Draw_Damaged_SHP(idx, 1, Str->X * 30, Str->Y * 15, Str->Z, dst, &Str->P);
+			BuildingTypes.Draw_Damaged_SHP(idx, 1, Str->X * 30, Str->Y * 15, Str->Z, Str->direction, dst, &Str->P);
 	}
 }
 
 void Theater::Draw_Infantry(Infantry* Inf, DrawingSurface& dst) {
 	int idx = InfantryTypes.Get_Image_Index(Inf->name);
 	if (idx >= 0) {
-		InfantryTypes.Draw_SHP(idx, 0, Inf->X * 30, Inf->Y * 15, Inf->Z, dst, &Inf->P);
+		InfantryTypes.Draw_SHP(idx, 0, Inf->X * 30, Inf->Y * 15, Inf->Z, Inf->direction, dst, &Inf->P);
 	}
 }
 
 void Theater::Draw_Unit(Unit* Unit, DrawingSurface& dst) {
 	int idx = VehicleTypes.Get_Image_Index(Unit->name);
 	if (idx >= 0) {
-		VehicleTypes.Draw_SHP(idx, 0, Unit->X * 30, Unit->Y * 15, Unit->Z, dst, &Unit->P);
+		VehicleTypes.Draw_SHP(idx, 0, Unit->X * 30, Unit->Y * 15, Unit->Z, Unit->direction, dst, &Unit->P);
+	}
+}
+
+void Theater::Draw_Aircraft(Aircraft* Aircraft, DrawingSurface& dst) {
+	int idx = AircraftTypes.Get_Image_Index(Aircraft->name);
+	if (idx >= 0) {
+		AircraftTypes.Draw_SHP(idx, 0, Aircraft->X * 30, Aircraft->Y * 15, Aircraft->Z, Aircraft->direction, dst, &Aircraft->P);
 	}
 }
 

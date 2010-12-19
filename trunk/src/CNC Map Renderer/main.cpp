@@ -12,7 +12,11 @@
 #include "VXL_File.h"
 #include "Palet.h"
 
+#include "VoxelRenderer.h"
+#include <GL/glut.h>
+
 using std::cout;
+
 using std::string;
 using boost::shared_ptr;
 
@@ -28,6 +32,8 @@ void clean_outfile(std::string& s){
 	boost::algorithm::erase_all(s, "\"");
 }
 int main(int argc, char* argv[]) {
+	glutInit(&argc, argv);
+
 	AnyOption opt;
 	opt.addUsage("Usage: ");
 	opt.addUsage("" );
@@ -131,28 +137,7 @@ int main(int argc, char* argv[]) {
 	else outdir = opt.getValue('d');
 
 	bool use_localsize = !opt.getFlag("F");
-
-	// ---------------------------
-	// ---------------------------
-	// ---        tests        ---
-	boost::shared_ptr<VXL_File> v(new VXL_File(vfs.open("sam.vxl"), vfs.open("zep.hva")));
-	v->Initialize();
-	assert(v->is_valid());
-	Palet p(vfs.open("unittem.pal"));
-	p.Recalculate();
-	DrawingSurface ds(200, 200);
-	// v.Draw(0, 0, ds, p.Get_Colors());
-	/*boost::shared_ptr<SHP_File> s = v->Get_SHP();
-	s->Draw(36, 100, 100, ds, p.Get_Colors());
-	ds.SaveJPEG("c:\\soms.jpg", 90, 0, 0, 200, 200);
-	VFS::DirFile f("c:\\soms2.shp", "", "", true);
-	vector<unsigned char> buf(s->get_data(), s->get_data() + s->get_size());
-	f.write(buf);*/
-	// exit(0);
-
-	// ---------------------------
-	// ---------------------------
-
+	
 	cout << "Loading map " << infile << ".." << endl;
 	ini_file MapINI(infile);
 	Map_Type M = UKN;
@@ -245,7 +230,7 @@ int main(int argc, char* argv[]) {
 
 	if (opt.getFlag('r'))
 		myMap.fuck_Ore();
-
+	
 	myMap.Draw();
 
 	if (opt.getFlag('S'))

@@ -88,6 +88,9 @@ public:
 
 	// Draw a SHP on surface dst from shp collection InfantryTypes
 	void Draw_Unit(Unit* T, DrawingSurface& dst);
+	
+	// Draw a SHP or vxl on surface dst from shp collection InfantryTypes
+	void Draw_Aircraft(Aircraft* T, DrawingSurface& dst);
 
 	const TMP_Collection& Get_Tile_C() const;
 

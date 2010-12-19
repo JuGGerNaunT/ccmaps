@@ -2,149 +2,137 @@
 
 #include "File.h"
 #include <vector>
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include "DrawingSurface.h"
-#include <boost/cstdint.hpp>
+#include <stdint.h>
+#include <string>
 #include "Palet.h"
+#include "DrawingSurface.h"
+#include "HVA_File.h"
 
-using boost::int16_t;
-using boost::int32_t;
-using boost::uint8_t;
-
-#pragma pack(push, 1)
-
-struct t_vxl_header {
-	char id[16];
-	int32_t one;
-	uint32_t c_section_headers;
-	uint32_t c_section_tailers;
-	uint32_t size;
-	int16_t unknown;
-	unsigned char palet[768];
-};
-
-struct t_vxl_section_header {
-	char id[16];
-	__int32 section_i;
-	__int32 one;
-	__int32 zero;
-};
-
-struct t_vxl_section_tailer {
-    __int32 span_start_ofs;
-    __int32 span_end_ofs;
-    __int32 span_data_ofs;
-	float scale;
-	float transform[3][4];
-	float x_min_scale;
-	float y_min_scale;
-	float z_min_scale;
-	float x_max_scale;
-	float y_max_scale;
-	float z_max_scale;
-	unsigned __int8 cx;
-	unsigned __int8 cy;
-	unsigned __int8 cz;
-	__int8 unknown;
-};
-
-const char vxl_id[] = "Voxel Animation";
-
-#pragma pack(pop)
-
+#define RA2_NUM_NORMALS		244
+#define TS_NUM_NORMALS		36
 
 class VXL_File {
 private:
-
 	bool initialized;
-	boost::shared_ptr<File> f;
-	boost::shared_ptr<File> hva;
-
+	boost::shared_ptr<File> vxl;
+	boost::shared_ptr<HVA_File> hva;
 	std::vector<unsigned char> vxl_data;
 
-	unsigned char* get_data();
-	const unsigned char* get_data() const { return &vxl_data[0]; }
+public:
+	static char const fileTypeText[];
+	static float const RA2Normals[RA2_NUM_NORMALS][3];
+	static float const TSNormals[TS_NUM_NORMALS][3];
 
-	const int get_size() const {
-		return f->size();
-	}
+	struct Header {
+		uint8_t fileType[16];	/* "Voxel Animation" */
+		uint32_t unknown;		/* == 1 */
+		uint32_t numLimbs;		/* Number of limbs/bodies/tailers */
+		uint32_t numLimbs2;		/* == numLimbs */
+		uint32_t bodySize;		/* Total size in bytes of all limb bodies */
+		uint8_t startPaletteRemap;	/* (?) Palette remapping for player colours (?) */
+		uint8_t endPaletteRemap;		
+		std::vector<unsigned char> palette;		/* RGB colour palette */
+	};
+	struct LimbHeader {
+		uint8_t name[16];		/* Limb name (Zero terminated) */
+		uint32_t number;		/* Limb number */
+		uint32_t unknown;		/* == 1 */
+		uint32_t unknown2;		/* == 0 or == 2 (Documentation is contradictory) */
+	};
+	struct LimbBody {
+		int32_t* spanStart;
+		int32_t* spanEnd;
+		struct Span {
+			uint8_t numVoxels;
+			struct Voxel {
+				uint8_t colour;
+				uint8_t normal;
+				bool used;
+				Voxel() : used(true) { }
+			} *voxel;
+			Span() : voxel(NULL) { }
+			~Span() { delete[] voxel; }
+			void alloc() {
+				delete[] voxel;
+				voxel = new Voxel[numVoxels];
+			}
+		} *span;
+		LimbBody() : spanStart(NULL), spanEnd(NULL), span(NULL) { }
+		~LimbBody() {
+			delete[] spanStart;
+			delete[] spanEnd;
+			delete[] span;
+		}
+		void alloc(unsigned int n) {
+			delete[] spanStart;
+			spanStart = new int32_t[n];
+			delete[] spanEnd;
+			spanEnd = new int32_t[n];
+			delete[] span;
+			span = new Span[n];
+		}
+	};
+	struct LimbTailer {
+		uint32_t spanStartOff;		/* Offset into body section to span start list */
+		uint32_t spanEndOff;		/* Offset into body section to span end list */
+		uint32_t spanDataOff;		/* Offset into body section to span data */
+		float scale;			/* Scale factor for the section always seems to be 0.083333 */
+		float transform[3][4];		/* Transformation matrix */
+		float minBounds[3];		/* Voxel bounding box */
+		float maxBounds[3];
+		uint8_t xSize;			/* Width of voxel limb */
+		uint8_t ySize;			/* Breadth of voxel limb */
+		uint8_t zSize;			/* Height of voxel limb */
+		uint8_t normalType;		/* 2 == TS Normals, 4 == RA2 Normals */
+	};
 
-	const t_vxl_header& header() const {
-		return *reinterpret_cast<const t_vxl_header*>(get_data());
-	}
+protected:
+	Header header;
+	LimbHeader* limbHeaders;
+	LimbBody* limbBodies;
+	LimbTailer* limbTailers;
 
-	int get_c_section_headers() const {
-		return header().c_section_headers;
-	}
+	uint32_t currentLimb;
 
-	int get_c_spans(int i) const {
-		return get_section_tailer(i)->span_end_ofs - get_section_tailer(i)->span_start_ofs >> 2;
-	}
-
-	int get_c_section_tailers() const {
-		return header().c_section_tailers;
-	}
-
-	const unsigned char* get_palet() const {
-		return header().palet;
-	}
-
-	const unsigned char* get_section_body() const {
-		return get_data() + sizeof(t_vxl_header) + sizeof(t_vxl_section_header) * get_c_section_tailers();
-	}
-
-	const t_vxl_section_header* get_section_header(int i) const {
-		return reinterpret_cast<const t_vxl_section_header*>(get_data() + sizeof(t_vxl_header) + sizeof(t_vxl_section_header) * i);
-	}
-
-	const t_vxl_section_tailer* get_section_tailer(int i) const {
-		return reinterpret_cast<const t_vxl_section_tailer*>(get_data() + get_size() + sizeof(t_vxl_section_tailer) * (i - get_c_section_tailers()));
-	}
-
-	const unsigned char* get_span_data(int i, int j) const {
-		if (get_span_start_list(i)[j] == -1)
-			return NULL;
-		return get_section_body() + get_section_tailer(i)->span_data_ofs + get_span_start_list(i)[j];
-	}
-
-	int get_span_size(int i, int j) const {
-		return get_span_end_list(i)[j] - get_span_start_list(i)[j] + 1;
-	}
-
-	const int* get_span_start_list(int i) const {
-		return reinterpret_cast<const int*>(get_section_body() + get_section_tailer(i)->span_start_ofs);
-	}
-
-	const int* get_span_end_list(int i) const {
-		return reinterpret_cast<const int*>(get_section_body() + get_section_tailer(i)->span_end_ofs);
-	}
+	void readPalette(unsigned int& spos);
+	void readLimbHeader(LimbHeader*, unsigned int& spos);
+	void readLimbBody(uint32_t, unsigned int& spos);
+	void readLimbTailer(LimbTailer*, unsigned int& spos);
+	uint8_t decompressVoxels(LimbBody::Span::Voxel*, uint8_t, unsigned int& spos);
 
 public:
-	VXL_File(boost::shared_ptr<File> f, boost::shared_ptr<File> hva) : f(f), hva(hva) {
+	VXL_File(boost::shared_ptr<File> vxl, boost::shared_ptr<HVA_File> hva) : vxl(vxl), hva(hva) {
 		initialized = false;
 		Y_Sort = 0;
 		X_Offset = 0;
 		Y_Offset = 0;
 		//if (f->size() < 0) throw;
 	}
+	~VXL_File();
+	void Initialize();
+
+	bool getVoxel(uint8_t, uint8_t, uint8_t, LimbBody::Span::Voxel*);
+	const std::vector<unsigned char>& getPalette();
+	void getXYZNormal(uint8_t, float&, float&, float&);
+	void getSize(uint8_t&, uint8_t&, uint8_t&);
+	std::string limbName();
+	void getBounds(float*, float*);
+	void getTotalBounds(int&, int&);
+	float getScale();
+	void loadGLMatrix(float*);
+	uint32_t getNumLimbs();
+	void setCurrentLimb(uint32_t);
+	void setCurrentLimb(std::string const&);
+		
 	int Y_Sort;
 	int X_Offset;
 	int Y_Offset;
-	
 	void Set_YSort(int ysort) { this->Y_Sort = ysort; }
 	void Set_Offset(int xoff, int yoff) { this->X_Offset = xoff; this->Y_Offset = yoff; }
 
-	void Initialize() {
-		if (f && !initialized) {
-			f->seek_start();
-			if (f->read(vxl_data, f->size()) != f->size())
-				throw;
-			initialized = true;
-		}
+	void Draw(const int x, const int y, const int direction, DrawingSurface& dst, const Palet* p);
+	void setPalette(const Palet* p) {
+		// just overwrite old one
+		memcpy(&this->header.palette[0], p->Get_Colors(), 768);
 	}
-
-	bool is_valid() const;
-
-	void Draw(const int x, const int y, const int xrot, const int yrot, DrawingSurface& dst, const Palet* p);
 };

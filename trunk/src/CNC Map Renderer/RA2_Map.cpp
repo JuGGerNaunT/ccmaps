@@ -416,7 +416,6 @@ void RA2_Map::Read_Overlay() {
 	assert(test == 1 << 18);
 	delete[] d;
 
-
 	// Get OverlayDataPack section
 	concatenate = MapINI.get_section("overlaydatapack").get_concatenated_values();
 
@@ -435,9 +434,7 @@ void RA2_Map::Read_Overlay() {
 	// destination coordinates for tile (conversion from rhombus)
 	for (int y = 0; y < Size.h * 2; y++) {
 		for (int x = 0; x < Size.w * 2; x++) {
-
 			Tile* T = Get_Tile(x, y);
-
 			unsigned char* o = OverlayPack + T->RX + 512 * T->RY;
 			if (T->Exists && (*o != 0xff)) {
 				Overlay ovl;
@@ -585,6 +582,7 @@ void RA2_Map::Read_Structures() {
 			S->health = health;
 			S->name = structure;
 			S->owner = splitline[0];
+			S->direction = boost::lexical_cast<int>(splitline[5]);
 		}
 	}
 }
@@ -661,12 +659,29 @@ void RA2_Map::Create_Object_Palets() {
 					Str->P.Remap(myTheater.Get_Country_Remap(Str->owner));
 				}
 			}
-
+			
 			Infantry* Inf = Get_Infantry(x, y);
 			if (Inf->Exists) {
 				Palet_Type pt = myTheater.InfantryTypes.Get_Palet(Inf->name);
 				const Palet& p = myTheater.Get_Palet(pt);
 				Inf->P = p.Get_Copy_Height(T->Z + myTheater.InfantryTypes.Get_Height_Offset(Inf->name));
+				Inf->P.Remap(myTheater.Get_Country_Remap(Inf->owner));
+			}
+			
+			Unit* Unit = Get_Unit(x, y);
+			if (Unit->Exists) {
+				Palet_Type pt = myTheater.VehicleTypes.Get_Palet(Unit->name);
+				const Palet& p = myTheater.Get_Palet(pt);
+				Unit->P = p.Get_Copy_Height(T->Z + myTheater.VehicleTypes.Get_Height_Offset(Unit->name));
+				Unit->P.Remap(myTheater.Get_Country_Remap(Unit->owner));
+			}
+			
+			Aircraft* Aircraft = Get_Aircraft(x, y);
+			if (Aircraft->Exists) {
+				Palet_Type pt = myTheater.AircraftTypes.Get_Palet(Aircraft->name);
+				const Palet& p = myTheater.Get_Palet(pt);
+				Aircraft->P = p.Get_Copy_Height(T->Z + myTheater.AircraftTypes.Get_Height_Offset(Aircraft->name));
+				Aircraft->P.Remap(myTheater.Get_Country_Remap(Aircraft->owner));
 			}
 
 		}
@@ -722,10 +737,8 @@ bool RA2_Map::Can_Draw_Here(int x, int y) {
 				if (within_foundation(x, y, i, j, fx, fy))
 					return false;
 			}
-
 		}
 	}
-
 	return true;
 }
 
@@ -805,11 +818,17 @@ void RA2_Map::Draw() {
 			if (Inf->Exists) {
 				myTheater.Draw_Infantry(Inf, MapSurface);
 			}
-
+			
 			// Draw vehicles
 			Unit* Unit = Get_Unit(x, y);
 			if (Unit->Exists) {
 				myTheater.Draw_Unit(Unit, MapSurface);
+			}
+
+			// Draw aircraft
+			Aircraft* Aircraft = Get_Aircraft(x, y);
+			if (Aircraft->Exists) {
+				myTheater.Draw_Aircraft(Aircraft, MapSurface);
 			}
 
 		}
@@ -975,10 +994,20 @@ void RA2_Map::Apply_Palet_Overrides() {
 			if (Str->Exists) {
 				Str->P.Recalculate();
 			}
-
+			
 			Infantry* Inf = Get_Infantry(x, y);
 			if (Inf->Exists) {
 				Inf->P.Recalculate();
+			}
+
+			Unit* Veh = Get_Unit(x, y);
+			if (Veh->Exists) {
+				Veh->P.Recalculate();
+			}
+
+			Aircraft* Aircraft = Get_Aircraft(x, y);
+			if (Aircraft->Exists) {
+				Aircraft->P.Recalculate();
 			}
 		}
 	}
@@ -1160,7 +1189,9 @@ void RA2_Map::Read_Infantry() {
 		I->RX = tl->RX;
 		I->RY = tl->RY;
 		I->RZ = tl->RZ;
+		I->owner = splitline[0];
 		I->name = splitline[1];
+		I->direction = boost::lexical_cast<int>(splitline[7]);
 	}
 }
 
@@ -1198,7 +1229,9 @@ void RA2_Map::Read_Units() {
 		U->RX = tl->RX;
 		U->RY = tl->RY;
 		U->RZ = tl->RZ;
+		U->owner = splitline[0];
 		U->name = splitline[1];
+		U->direction = boost::lexical_cast<int>(splitline[5]);
 	}
 }
 
@@ -1235,7 +1268,9 @@ void RA2_Map::Read_Aircraft() {
 		A->RX = tl->RX;
 		A->RY = tl->RY;
 		A->RZ = tl->RZ;
+		A->owner = splitline[0];
 		A->name = splitline[1];
+		A->direction = boost::lexical_cast<int>(splitline[5]);
 	}
 }
 

@@ -58,7 +58,7 @@ public:
 	SHP_File(boost::shared_ptr<File> f);
 	SHP_File(std::vector<unsigned char> v);
 	void Draw(const int img, const int x, const int y, DrawingSurface& dst, const unsigned char* colors);
-	void Draw_Shadow(int img, const int x, const int y, const int height, DrawingSurface &dst);
+	void Draw_Shadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface &dst);
 	boost::shared_ptr<SHP_File> Get_SHP();
 	void Initialize(); // reads from disk
 	void Set_YSort(int ysort);
@@ -193,14 +193,14 @@ public:
 	void Add_Voxel( boost::shared_ptr<VXL_File> f, bool shadow /*= false*/ );
 
 	// Draw using given pallette. May have been altered by lightsource.
-	void Draw(const int img, const int x, const int y, const int height, DrawingSurface& dst, const Palet* p);
-	void Draw_NoShadow(int img, const int x, const int y, const int height, DrawingSurface& dst, const Palet* p);
-	void Draw_Shadow(int img, const int x, const int y, const int height, DrawingSurface& dst);
+	void Draw(const int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst, const Palet* p);
+	void Draw_NoShadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst, const Palet* p);
+	void Draw_Shadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst);
 
 	// Draw using given pallette. May have been altered by lightsource.
-	void Draw_Damaged(const int img, const int x, const int y, const int height, DrawingSurface& dst, const Palet* p);
-	void Draw_Damaged_NoShadow(int img, const int x, const int y, const int height, DrawingSurface& dst, const Palet* p);
-	void Draw_Damaged_Shadow(int img, const int x, const int y, const int height, DrawingSurface& dst);
+	void Draw_Damaged(const int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst, const Palet* p);
+	void Draw_Damaged_NoShadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst, const Palet* p);
+	void Draw_Damaged_Shadow(int img, const int x, const int y, const int height, const int direction, DrawingSurface& dst);
 
 	void Set_Palet(Palet_Type P);
 	Palet_Type Get_Palet();
