@@ -39,13 +39,13 @@ public:
 	void Set_Palet(Palet_Type P, Palet* plt);
 	const SHP_Image& Get_Image(std::string image_filename);
 
-	void Draw_SHP(int num, int sub, int x, int y, int z, DrawingSurface& dst, const Palet* p);
-	void Draw_SHP_Shadow(int num, int sub, int x, int y, int z, DrawingSurface& dst);
-	void Draw_SHP_NoShadow(int num, int sub, int x, int y, int z, DrawingSurface& dst, const Palet* p);
+	void Draw_SHP(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst, const Palet* p);
+	void Draw_SHP_Shadow(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst);
+	void Draw_SHP_NoShadow(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst, const Palet* p);
 
-	void Draw_Damaged_SHP(int num, int sub, int x, int y, int z, DrawingSurface& dst, const Palet* p);
-	void Draw_Damaged_SHP_Shadow(int num, int sub, int x, int y, int z, DrawingSurface& dst);
-	void Draw_Damaged_SHP_NoShadow(int num, int sub, int x, int y, int z, DrawingSurface& dst, const Palet* p);
+	void Draw_Damaged_SHP(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst, const Palet* p);
+	void Draw_Damaged_SHP_Shadow(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst);
+	void Draw_Damaged_SHP_NoShadow(int num, int sub, int x, int y, int z, const int direction, DrawingSurface& dst, const Palet* p);
 
 	int Get_Image_Index(std::string image_filename);
 	int Get_X_Offset(int idx);

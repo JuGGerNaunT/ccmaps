@@ -20,7 +20,7 @@ Palet::Palet() {
 	ambient = 1.0;
 }
 
-Palet::Palet(unsigned char* palet) {
+Palet::Palet(unsigned char* palet, bool full_color) {
 	orig.resize(768);
 	memcpy(&orig[0], palet, 768);
 	red_mult = green_mult = blue_mult = 1.0;

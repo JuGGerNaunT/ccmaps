@@ -37,7 +37,7 @@ private:
 
 public:
 	Palet();
-	Palet(unsigned char* palet);
+	Palet(unsigned char* palet, bool full_color = false);
 	Palet(unsigned char* palet, const Lighting& l);
 	Palet(boost::shared_ptr<File> f);
 	void Initialize(boost::shared_ptr<File> f);
@@ -54,8 +54,9 @@ public:
 	void Adjust_Colors(double rOff, double gOff, double bOff, double aOff);
 
 	void Set_Colors(std::vector<unsigned char> colors);
-
+	
 	void Read_Colors(boost::shared_ptr<File> f, double rOff, double gOff, double bOff);
+	void Read_Colors(std::vector<unsigned int> data, int offset);
 	void Recalculate();
 	Palet Get_Copy_Height(int height) const;
 	void Set_Height(int height);

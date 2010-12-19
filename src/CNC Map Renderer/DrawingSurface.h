@@ -10,9 +10,10 @@ private:
 	unsigned int stride;
 	int width;
 	int height;
+	int bpp;
 
 public:
-	DrawingSurface(int width, int height);
+	DrawingSurface(int width, int height, int bpp = 24);
 	DrawingSurface();
 	~DrawingSurface();
 	int Get_Stride() const;
@@ -29,8 +30,8 @@ public:
 	unsigned char* Get_Lower_Bound();
 	const unsigned char* Get_Higher_Bound() const;
 	unsigned char* Get_Higher_Bound();
-	void SavePNG(const std::string& path, int compression, int left, int top, int width, int height) const;
-	void SaveJPEG(const std::string& path, int quality, int left, int top, int width, int height) const;
-	void SetDimensions(int width, int height);
+	void SavePNG(const std::string& path, int compression, int left, int top, int width, int height, bool invert_rows = true) const;
+	void SaveJPEG(const std::string& path, int quality, int left, int top, int width, int height, bool invert_rows = true) const;
+	void SetDimensions(int width, int height, int bpp = 24);
 	int* Get_ZOrders() const;
 };

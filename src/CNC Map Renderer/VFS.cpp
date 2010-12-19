@@ -11,6 +11,7 @@ using std::vector;
 using boost::shared_ptr;
 
 VFS::VFS vfs;
+
 int wildcmp(const char *wild, const char *string); 
 namespace VFS {
 

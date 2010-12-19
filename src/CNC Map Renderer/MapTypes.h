@@ -24,6 +24,15 @@ struct RA2Object {
 	bool Exists;
 };
 
+struct NameableObject : public RA2Object {
+	std::string name;
+};
+
+struct OwnableObject : public NameableObject {
+	std::string owner;
+	int direction; // facing
+};
+
 struct Tile : public RA2Object {
 	int SetNum;
 	int TileNr;
@@ -35,31 +44,24 @@ struct Overlay : public RA2Object {
 	int sub;
 };
 
-struct Structure : public RA2Object {
-	std::string name;
-	std::string owner;
+struct Structure : public OwnableObject {
 	int health;
 };
 
-struct Terrain : public RA2Object {
-	std::string name;
+struct Terrain : public NameableObject {
 };
 
-struct Smudge : public RA2Object {
-	std::string name;
+struct Smudge : public NameableObject {
 };
 
-struct Infantry : public RA2Object {
-	std::string name;
+struct Infantry : public OwnableObject {
 	int health;
 };
 
-struct Unit : public RA2Object {
-	std::string name;
+struct Unit : public OwnableObject {
 	int health;
 };
 
-struct Aircraft : public RA2Object {
-	std::string name;
+struct Aircraft : public OwnableObject {
 	int health;
 };

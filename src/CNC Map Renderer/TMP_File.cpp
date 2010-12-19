@@ -116,7 +116,7 @@ void TMP_File::Draw(int sub_tile, int x_offset, int y_offset, int height, Drawin
 		for (y = 0; y < cy; y++) {
 			unsigned char* w = w_line;
 			z = z_line;
-			shadows == shadow_line;
+			shadows = shadow_line;
 			for (int x = 0; x < cx; x++) {
 				// Checking per line is required because v needs to be checked every time
 				int v = *r++;
