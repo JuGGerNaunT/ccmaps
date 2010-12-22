@@ -149,26 +149,28 @@ void MixArchive::parse_ra_header() {
 
 		uint16_t index_size =
 			*reinterpret_cast<uint16_t*>(&header[0]) * 12;
+		uint16_t blowfish_size = 
+			index_size + 5 & ~7;
 		uint16_t data_size =
 			*reinterpret_cast<uint16_t*>(&header[2]);
 		base_offset += index_size + (index_size % 8);
 
 		// Read file index
-		vector<uint8_t> index_buf(index_size + 2);
-		if (base->read(buff, index_size) != index_size) {
+		vector<uint8_t> index_buf(index_size + 8);
+		if (base->read(buff, blowfish_size) != blowfish_size) {
 			throw std::runtime_error(
 				"MixArchive: '" + path() + "': Invalid file index");
 		}
-		memcpy(&index_buf[2], &buff[0], index_size);
-
+		memcpy(&index_buf[2], &buff[0], blowfish_size);
+		
 		// First two bytes of first entry comes from
 		// the header_buf (see above)
 		index_buf[0] = header[6];
 		index_buf[1] = header[7];
 
 		// Decipher index. The last two bytes are discarded, not sure why
-		bf.decipher(&index_buf[2], &index_buf[2], index_size); //  + 5 & ~7);
-		index_buf.resize(index_buf.size() - 2);
+		bf.decipher(&index_buf[2], &index_buf[2], blowfish_size); //  + 5 & ~7);
+		index_buf.resize(index_size);
 
 		// 92 = RA flags + index_size + data_size
 		//	+ westwood_key + 2 unknown bytes

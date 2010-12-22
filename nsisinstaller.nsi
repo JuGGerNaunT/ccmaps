@@ -38,8 +38,8 @@ Section "RA2/YR Map renderer" Section1
 
 	; Set Section Files and Shortcuts
 	SetOutPath "$INSTDIR\"
-	File "vs\Release\cncmaprender.exe"
-	File "vs\bin\Release\CNC Map Renderer GUI.exe"
+	File "build\msvc10\Release Mesa\cncmaprender.exe"
+	File "build\msvc10\bin\Release Mesa\CNC Map Renderer GUI.exe"
 	CreateShortCut "$DESKTOP\CNC Map renderer.lnk" "$INSTDIR\CNC Map Renderer GUI.exe"
 	CreateDirectory "$SMPROGRAMS\CNC Map renderer"
 	CreateShortCut "$SMPROGRAMS\CNC Map renderer\CNC Map renderer.lnk" "$INSTDIR\CNC Map Renderer GUI.exe"

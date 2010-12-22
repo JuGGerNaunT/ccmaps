@@ -38,6 +38,7 @@ Can be set to 'yes' or 'no' and determines whether or not this object should cas
 
 void SHP_Collection::Initialize(SHP_Type S, Theater_Type T,	shared_ptr<ini_file> RulesINI) {
 	this->RulesINI = RulesINI;
+	this->S = S;
 	string section_name = get_section_Name(S);
 	ini_section& Objects(RulesINI->get_section(section_name));
 	keymap::const_iterator it;
@@ -277,10 +278,20 @@ void SHP_Collection::Add_File_To_Image(string ObjName, SHP_Type S, Theater_Type 
 		if (ObjRules.read_bool("Turret")) {
 			string img = ObjRules.read_string("TurretAnim");
 			img += ObjRules.read_bool("TurretAnimIsVoxel") ? ".vxl" : ".shp";
+			int m_x = ObjRules.read_int("TurretAnimX"),
+				m_y = ObjRules.read_int("TurretAnimY");
 			Do_Add(img, s_img, 0, false, ObjRules.read_bool("TurretAnimIsVoxel"), 
-				ObjRules.read_int("TurretAnimX"), ObjRules.read_int("TurretAnimY") - ObjRules.read_double("TurretAnimZAdjust") / 128.0);
+				m_x, m_y);
 		}
 	}
+	else if (S == S_VEHICLE) {
+		// Add turrets
+		if (ObjRules.read_bool("Turret")) {
+ 			string img = art_image + "tur.vxl";
+			Do_Add(img, s_img, 0, false, true, ObjRules.read_int("TurretAnimX"), 0);
+		}
+	}
+	
 	images.push_back(s_img);
 }
 
@@ -332,12 +343,13 @@ void SHP_Collection::Do_Add(std::string image_filename, SHP_Image& s_img, int ys
 			if (file_hva && file_vxl) {
 				boost::shared_ptr<HVA_File> hva(new HVA_File(file_hva));
 				boost::shared_ptr<VXL_File> vxl(new VXL_File(file_vxl, hva));
+				if (this->S == S_BUILDING) // half tile to the left, center of 200x200px vxl render
+					vxl->Set_Offset(x_offset - 70, y_offset - 100);
+				else if (this->S == S_VEHICLE) // also vertical tile center, plus center of 200x200px vxl render
+					vxl->Set_Offset(x_offset - 70, y_offset - 85);
+
 				vxl->Set_YSort(ysort);
-				vxl->Set_Offset(x_offset, -y_offset);
 				s_img.Add_Voxel(vxl, shadow);
-			}
-			else { 
-				int i = 0; 
 			}
 		}
 	}

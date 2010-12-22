@@ -295,7 +295,9 @@ void SHP_Image::Draw(const int img, const int x, const int y, const int height, 
 		(*i)->Draw(img, x + x_offset, y + y_offset - height * 15, dst, p->Get_Colors());
 	}
 	for (vector< shared_ptr<VXL_File> >::iterator i = Voxels.begin(); i != Voxels.end(); i++) {
-		(*i)->Draw(x + x_offset + (*i)->X_Offset, y + y_offset - height * 15 - (*i)->Y_Offset, direction, dst, p);
+		int xoff = x + (*i)->X_Offset;
+		int yoff = y + - height * 15+ (*i)->Y_Offset;
+		(*i)->Draw(xoff, yoff, direction, dst, p);
 	}
 	Draw_Shadow(img, x, y, height, direction, dst);
 	if (AlphaImage)

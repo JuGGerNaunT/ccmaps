@@ -115,10 +115,10 @@ void VoxelRenderer::SetupFrameRender(DrawingSurface* dst) {
 	glRotatef(180, 0, 1, 0);
 
 	glRotatef(this->object_rotation, 0, 0, 1);
-	glScalef(0.083333, 0.0833336, 0.0833333); // trial and error guess value :D
+	glScalef(0.075, 0.075, 0.075); // trial and error guess value :D
 }
 
-DrawingSurface* VoxelRenderer::render(boost::shared_ptr<VXL_File> vxl, boost::shared_ptr<HVA_File> hva, int object_rotation, const Palet* p) {
+DrawingSurface* VoxelRenderer::render(VXL_File* vxl, HVA_File* hva, int object_rotation, const Palet* p) {
 	if (!initialized) init();
 	this->hva = hva;
 	this->vxl = vxl;
@@ -193,7 +193,7 @@ void VoxelRenderer::renderSection() {
 					float normal[3];
 					vxl->getXYZNormal(vx.normal, normal[0], normal[1], normal[2]);
 					glNormal3fv(normal);
-					renderVoxel((float)x * sectionScale[0], (float)y * sectionScale[1], (float)z * sectionScale[2], (1 - pitch) / 2);
+					renderVoxel((float)x * sectionScale[0], (float)y * sectionScale[1], (float)z * sectionScale[2], (1.0 - pitch) / 2.0);
 					glPopMatrix();
 				}
 			}

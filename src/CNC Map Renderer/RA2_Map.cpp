@@ -770,11 +770,6 @@ void RA2_Map::Draw() {
 				myTheater.Draw_Tile(T, MapSurface);
 			}	
 
-			// Draw terrain
-			Terrain* Ter = Get_Terrain(x, y);
-			if (Ter->Exists) {
-				myTheater.Draw_Terrain(Ter, MapSurface);
-			}
 		}
 	}
 
@@ -793,6 +788,12 @@ void RA2_Map::Draw() {
 			if (Smu->Exists) {
 				myTheater.Draw_Smudge(Smu, MapSurface);
 			}
+			
+			// Draw terrain
+			Terrain* Ter = Get_Terrain(x, y);
+			if (Ter->Exists) {
+				myTheater.Draw_Terrain(Ter, MapSurface);
+			}
 
 			// Draw non-overriding overlay
 			Overlay* O = Get_Overlay(x, y);
@@ -805,7 +806,6 @@ void RA2_Map::Draw() {
 					myTheater.Draw_Overlay_NoShadow(O, MapSurface);
 				}
 			}
-
 
 			// Draw structures
 			Structure* Str = Get_Structure(x, y);
