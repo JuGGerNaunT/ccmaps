@@ -220,4 +220,8 @@ public:
 	void Set_Anim_Palet(boost::shared_ptr<Palet> firepalet) {
 		this->firepalet = firepalet;
 	}
+	
+	const SHP_File& Get_Image(int idx) const { return *(this->Images[idx]); }
+	const int Num_Images() const { return this->Images.size(); }
+
 };
