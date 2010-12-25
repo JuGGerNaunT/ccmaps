@@ -107,9 +107,12 @@ Palet Palet::Get_Copy() const {
 }
 
 Palet Palet::Get_Copy_Height(int height) const {
-	Palet P_New = *this;
+	Palet P_New(*this);
 	P_New.Set_Height(height);
-	P_New.orig = std::vector<unsigned char>(orig.begin(), orig.end());
+	//if (this->orig.size() > 0)
+	//	P_New.orig = std::vector<unsigned char>(orig.begin(), orig.end());
+	//else
+	//	P_New.orig = std::vector<unsigned char>();
 	return P_New;
 }
 

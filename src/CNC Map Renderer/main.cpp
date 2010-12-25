@@ -141,8 +141,8 @@ int main(int argc, char* argv[]) {
 	cout << "Loading map " << infile << ".." << endl;
 	ini_file MapINI(infile);
 	Map_Type M = UKN;
-	if (opt.getValue('y')) M = YR;
-	else if (opt.getValue('l')) M = RA2;
+	if (opt.getValue('Y')) M = YR;
+	else if (opt.getValue('y')) M = RA2;
 	RA2_Map myMap(MapINI, M);
 
 	std::string outfile;
@@ -157,12 +157,15 @@ int main(int argc, char* argv[]) {
 		if (outfile == "" && basic.read_bool("Official") == true) {
 			string pktfile;
 			bool isyr = myMap.Get_MapType() == YR;
-			std::cout << "Determining mapname" <<isyr<< std::endl;
+			std::cout << "Determining mapname" << std::endl;
 			bool custom_pkt = false;
-			if (boost::filesystem::extension(infile) == ".mmx") {
+			std::string ext = boost::filesystem::extension(infile);
+			if (ext == ".mmx" || ext == ".yro") {
 				pktfile = infile_nopath + ".pkt";
 				vfs.add(infile);
 				custom_pkt = true;
+				if (ext == ".yro") // definitely YR map
+					isyr = true;
 			}
 			else if (isyr)
 				pktfile = "missionsmd.pkt";
@@ -173,9 +176,26 @@ int main(int argc, char* argv[]) {
 
 			// read mapname from csf
 			string pkt_mapname;
-			if (!custom_pkt) pkt_mapname = infile_nopath;
-			else pkt_mapname = pkt.get_key("multimaps", "1");
+			if (custom_pkt) {
+				pkt_mapname = pkt.get_key("multimaps", "1");
+				if (pkt_mapname == "")
+					pkt_mapname = infile_nopath;
+			}
+			else if (pkt_mapname == "") {
+				// fallback for multiplayer maps with, .map extension, 
+				// no YR objects so assumed to be ra2, but actually meant to be used on yr
+				if (!isyr && ext == ".map" && !pkt.has_section(infile_nopath) && basic.read_bool("MultiplayerOnly")) {
+					pktfile = "missionsmd.pkt";
+					pkt = vfs.open(pktfile);
+					isyr = true;
+				}
+			}
+			// last resort
+			if (pkt_mapname == "")
+				pkt_mapname = infile_nopath;
+
 			boost::algorithm::to_lower(pkt_mapname);
+			pkt.set_current_section(pkt_mapname);
 
 			string csf_entry;
 			if (basic.read_bool("MultiplayerOnly")) { // multiplayer map
@@ -203,25 +223,53 @@ int main(int argc, char* argv[]) {
 						if (csf_value.find(" (") != string::npos)
 							csf_value = csf_value.substr(0, csf_value.find(" ("));
 						outfile = csf_value;
+						if (basic.read_bool("MultiplayerOnly")) {
+							// not standard map
+							if (pkt.get_current_section().read_string("gamemode").find("standard") == string::npos) {
+								if (pkt.get_current_section().read_string("gamemode") == "megawealth")
+									outfile += " (Megawealth)";
+								else if (pkt.get_current_section().read_string("gamemode") == "duel")
+									outfile += " (Land Rush)";
+								else if (pkt.get_current_section().read_string("gamemode") == "navalwar")
+									outfile += " (Naval War)";
+							}
+						}
 						clean_outfile(outfile);
 						std::cout << "Mapname found " << outfile << std::endl;
 					}
 				}
 			}
+
 		}
 		// 3) On unofficial maps, name specified in basic section
-		_3:
-		if (outfile == "" /*&& basic.read_bool("Official") == false*/) {
+		else if (outfile == "" /*&& basic.read_bool("Official") == false*/) {
 			outfile = basic.read_string("Name");
 			clean_outfile(outfile);
 		}
-
-		if (outfile == "") {
-			// 4) Fallback: file name
-			outfile = infile_nopath;
-			boost::algorithm::to_lower(outfile);
-		}
 	}
+
+	if (outfile == "") {
+		// 4) Fallback: file name
+		outfile = infile_nopath;
+		boost::algorithm::to_lower(outfile);
+	}
+	
+	/* map renamign shit
+	// unload vfs
+	vfs.remove_all();
+	outdir = outdir + "/" + outfile;
+	if (!fs::exists(outdir))
+		fs::create_directory(outdir);
+	std::string injpeg = pth.parent_path().string() + "/" + outfile + ".jpg",
+		outjpeg = outdir + "/" + outfile + ".jpg";
+	if (fs::exists(injpeg))
+		fs::rename(injpeg, outjpeg);
+
+	std::string inmap = pth.string(),
+		outmap = outdir + "/" + pth.filename();
+	fs::rename(inmap, outmap);
+	exit(0);
+	*/
 
 	myMap.LoadMap();
 
@@ -282,7 +330,7 @@ int main(int argc, char* argv[]) {
 		myMap.SavePNG(outdir, outfile, compression);
 	}
 
-	std::cout << std::endl << "Program by Frank Razenberg. Copyright (c) 2007-2010." << std::endl;
+	std::cout << std::endl << "Program by Frank Razenberg. Copyright (c) 2007-2011." << std::endl;
 	std::cout << std::endl << "Thanks go out to Olaf van der Spek for XCC," << std::endl;
 	std::cout << "Perry aka BrutalAl for coding assistance, lots of ideas and help," << std::endl;
 	std::cout << "Matthias Wagner for Final Alert 2," << std::endl;

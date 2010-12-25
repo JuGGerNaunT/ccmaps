@@ -118,7 +118,7 @@ namespace RA2Maps_GUI {
 		private void button1_Click(object sender, EventArgs e) {
 			openFileDialog1.CheckFileExists = true;
 			openFileDialog1.Multiselect = false;
-			openFileDialog1.Filter = "RA2/YR map files (*.map, *.mpr, *.mmx, *.yrm)|*.mpr;*.map;*.mmx;*.yrm|All files (*.*)|*";
+			openFileDialog1.Filter = "RA2/YR map files (*.map, *.mpr, *.mmx, *.yrm, *.yro)|*.mpr;*.map;*.mmx;*.yrm;*.yro|All files (*.*)|*";
 			openFileDialog1.InitialDirectory = readmixdir();
 			openFileDialog1.FileName = "";
 			if (openFileDialog1.ShowDialog() == DialogResult.OK)

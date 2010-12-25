@@ -152,7 +152,7 @@ void TMP_Collection::Add_Tiles(const TileSet& ts, string ext) {
 }
 
 void TMP_Collection::Draw_Tile(const Tile* T, DrawingSurface& dst) const {
-	if (TMP_Fileset[T->TileNr].TMPs.size() > 0) {
+	if (0 <= T->TileNr && T->TileNr < TMP_Fileset.size() && TMP_Fileset[T->TileNr].TMPs.size() > 0) {
 		shared_ptr<TMP_File> Tf = TMP_Fileset[T->TileNr].get_tile();
 		Tf->Draw(T->SubTile, T->X * 30, (T->Y - T->Z) * 15, T->Z, dst, T->P.Get_Colors());
 	}

@@ -102,7 +102,7 @@ void SHP_File::Draw(const int img, const int x, const int y, DrawingSurface& dst
 	unsigned int c_px = h.cx * h.cy;
 	unsigned int stride = dst.Get_Stride();
 
-	if (c_px <= 0)
+	if (c_px <= 0 || h.cx < 0 || h.cy < 0 || img > t.c_images)
 		return;
 
 	// This image is not yet decoded, do so now

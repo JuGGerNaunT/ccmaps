@@ -7,6 +7,7 @@ bool* get_ofs(bool* w, int x, int y, int stride);
 
 void TMP_File::Draw(int sub_tile, int x_offset, int y_offset, int height, DrawingSurface& dst, const unsigned char* palet) {
 	if (!initialized) Initialize();
+	if (sub_tile >= get_c_tiles()) return;
 	unsigned char* write = dst.Get_Lower_Bound();
 	unsigned int stride = dst.Get_Stride();
 

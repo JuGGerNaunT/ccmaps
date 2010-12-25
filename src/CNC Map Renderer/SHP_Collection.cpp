@@ -10,7 +10,7 @@ using boost::shared_ptr;
 const std::string Extra_Images[] = {
 	"ActiveAnim",	"ActiveAnimTwo",	"ActiveAnimThree",	"ActiveAnimFour",
 	"SpecialAnim",	"SpecialAnimTwo",	"SpecialAnimThree",	"SpecialAnimFour",
-	"BibShape", "Turret"
+	"BibShape", "Turret", "SuperAnim"
 };
 
 SHP_Collection::SHP_Collection() {
@@ -41,18 +41,8 @@ void SHP_Collection::Initialize(SHP_Type S, Theater_Type T,	shared_ptr<ini_file>
 	this->S = S;
 	string section_name = get_section_Name(S);
 	ini_section& Objects(RulesINI->get_section(section_name));
-	keymap::const_iterator it;
-	int num = 1;
-	while (true) {
-		string obj = Objects.read_string(boost::lexical_cast<string>(num));
-		num++;
-		if (obj == "") {
-			if (num > Objects.num_keys())
-				break;
-			else
-				continue;
-		}
-		Add_File_To_Image(obj, S, T);
+	for (keylist::const_iterator it = Objects.unsorted_begin(); it != Objects.unsorted_end(); it++) {
+		Add_File_To_Image(*it, S, T);
 	}
 }
 
@@ -86,7 +76,8 @@ void SHP_Collection::Add_File_To_Image(string ObjName, SHP_Type S, Theater_Type 
 	string image_filename = art_image;
 
 	// Skip rubbles
-	if (ObjRules.read_bool("IsRubble")) {		
+	if (ObjRules.read_bool("IsRubble")) {
+		s_img.Set_Palet(P_ISO);
 		images.push_back(s_img);
 		// rubbles aren't drawn: see http://modenc.renegadeprojects.com/IsRubble
 		return;
@@ -292,6 +283,12 @@ void SHP_Collection::Add_File_To_Image(string ObjName, SHP_Type S, Theater_Type 
 		}
 	}
 	
+	if (S == S_VEHICLE || S == S_BUILDING)
+		// try to add barrel
+		Do_Add(art_image + "barl.vxl", s_img, 0, false, true, 
+			ObjRules.read_int("TurretAnimX"),
+			ObjRules.read_int("TurretAnimY"));
+
 	images.push_back(s_img);
 }
 

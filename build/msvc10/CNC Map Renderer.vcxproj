@@ -89,6 +89,9 @@
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Frank\Desktop\lib;C:\Program Files %28x86%29\boost\boost_1_44\lib;$(LibraryPath)</LibraryPath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release Mesa|Win32'">C:\Users\Frank\Desktop\mesa\lib;C:\Users\Frank\Desktop\lib;C:\Program Files %28x86%29\boost\boost_1_44\lib;$(LibraryPath)</LibraryPath>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cncmaprender</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cncmaprender</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug Mesa|Win32'">cncmaprender</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release Mesa|Win32'">cncmaprender</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
