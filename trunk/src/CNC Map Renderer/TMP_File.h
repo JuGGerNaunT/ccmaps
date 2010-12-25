@@ -56,7 +56,6 @@ private:
 	unsigned char* get_data();
 	const unsigned char* get_data() const;
 	const t_tmp_ts_header* get_header() const;
-	int get_c_tiles() const;
 	int get_cblocks_x() const;
 	int get_cblocks_y() const;
 	const t_tmp_image_header* get_image_header(int i) const;
@@ -81,6 +80,7 @@ private:
 	}
 
 public:
+	int get_c_tiles() const;
 	TMP_File(boost::shared_ptr<File> f) {
 		initialized = false;
 		this->f = f;

@@ -44,7 +44,7 @@ namespace VFS {
 			return true;
 		}
 		else if (fs::is_regular(pth)) {
-			if (fs::extension(pth) == ".mix" || fs::extension(pth) == ".mmx") {
+			if (fs::extension(pth) == ".mix" || fs::extension(pth) == ".mmx" || fs::extension(pth) == ".yro") {
 				shared_ptr<File> dirfile(
 					new DirFile(pth.native_file_string(), pth.native_file_string(), pth.filename(), false));
 				shared_ptr<MixArchive> mia(		
@@ -53,7 +53,7 @@ namespace VFS {
 				return true;
 			}
 		}
-		else if (!fs::exists(pth) && boost::filesystem::extension(pth) == ".mix") {
+		else if (!fs::exists(pth) && (fs::extension(pth) == ".mix" || fs::extension(pth) == ".mmx" || fs::extension(pth) == ".yro")) {
 			// attempt to open mix from vfs
 			shared_ptr<File> mixfile = vfs.open(pth.string());
 			if (mixfile) {
@@ -117,6 +117,10 @@ namespace VFS {
 			string path = di->path().file_string();
 			boost::algorithm::to_lower(path);
 			if (wildcmp("*.mmx", path.c_str())) {
+				boost::filesystem::path p = *di;
+				add(p);
+			}
+			if (wildcmp("*.yro", path.c_str())) {
 				boost::filesystem::path p = *di;
 				add(p);
 			}

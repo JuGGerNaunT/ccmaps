@@ -77,6 +77,8 @@ const Palet& Theater::Get_Palet(Palet_Type P) const {
 		case P_LIB:	return p_lib;
 		case P_OVERLAY:	return p_ovl;
 		case P_UNIT: return p_unit;
+		default:
+			throw std::exception("shit");
 	}
 }
 
@@ -94,10 +96,9 @@ void Theater::Override(ini_file& Map) {
 			for (k_it = it->second->begin(); k_it != it->second->end(); k_it++) {
 				RulesINI->get_current_section().set_value(k_it->first, k_it->second);
 			}
-					}
+		}
 	}
 }
-
 const ini_section& Theater::Get_Object_INI(string section) {
 	return RulesINI->get_section(section);
 }
@@ -368,7 +369,11 @@ void Theater::Load_Houses(ini_file& map) {
 	for (std::vector<std::string>::iterator it = houses.begin(); it != houses.end(); it++) {
 		if (map.set_current_section(*it)) {
 			ini_section& c = map.get_current_section();
-			std::string col = c.read_string("Color");
+			std::string col;
+			if (c.get_name() == "neutral")
+				col = "LightGrey"; // this is hardcoded in the game, rules.ini says grey but it's invalid
+			else
+				col = c.read_string("Color");
 			boost::algorithm::to_lower(col);
 			this->remap_colors[*it] = named_colors[col];
 		}

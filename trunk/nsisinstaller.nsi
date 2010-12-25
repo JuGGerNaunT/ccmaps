@@ -2,7 +2,7 @@
 
 ; Define your application name
 !define APPNAME "CNC Map renderer"
-!define VERSION 0.99b
+!define VERSION 1.00a
 !define APPNAMEANDVERSION "CNC Map renderer ${VERSION}"
 
 ; Main Install settings

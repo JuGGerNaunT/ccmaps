@@ -288,10 +288,8 @@ int ini_section::parse_line(const string& line) {
 		// remove unnecessary garbage from value
 		fix_line(key);
 		boost::to_lower(key);
-
 		fix_line(value);
-
-		entries[key] = value;
+		set_value(key, value);
 		return 1;
 	}
 	return 0;
@@ -372,6 +370,22 @@ keymap::iterator ini_section::end() {
 	return entries.end();
 }
 
+keylist::const_iterator ini_section::unsorted_begin() const {
+	return entries2.begin();
+}
+
+keylist::const_iterator ini_section::unsorted_end() const {
+	return entries2.end();
+}
+
+keylist::iterator ini_section::unsorted_begin() {
+	return entries2.begin();
+}
+
+keylist::iterator ini_section::unsorted_end() {
+	return entries2.end();
+}
+
 int ini_section::read_int(const string& key, int assume) const {
 	std::string key_(key);
 	boost::to_lower(key_);
@@ -390,6 +404,8 @@ int ini_section::read_int(const string& key, int assume) const {
 void ini_section::set_value(const string& key, const string& value) {
 	std::string key_(key);
 	boost::to_lower(key_);
+	if (std::find(entries2.begin(), entries2.end(), key_) == entries2.end())
+		entries2.push_back(value);
 	entries[key_] = value;
 }
 

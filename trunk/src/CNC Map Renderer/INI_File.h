@@ -16,6 +16,7 @@ class ini_file; class ini_section; class ini_Entry;
 // typedefs
 typedef std::pair<int, int> Range;
 typedef std::map<std::string, std::string> keymap;
+typedef std::vector<std::string> keylist;
 typedef std::map<std::string, boost::shared_ptr<ini_section>> sectionmap;
 
 // ini_file consists of a number of ini sections
@@ -77,6 +78,10 @@ public:
 	// sets sections, gives confirmation
 	ini_section& get_section(const std::string& section);
 
+	bool has_section(const std::string& section) const {
+		return this->sections.find(section) != sections.end();
+	}
+
 	void set_value(const std::string& section, const std::string& key, const std::string& value);
 	void set_value(const std::string& key, const std::string& value);
 
@@ -93,6 +98,7 @@ private:
 	// Internal representation is a mapping of pairs
 	// (std::string key, std::string value)
 	keymap entries;
+	keylist entries2;
 	std::string section_name;
 
 public:
@@ -148,6 +154,11 @@ public:
 	keymap::const_iterator end() const;
 	keymap::iterator begin();
 	keymap::iterator end();
+	
+	keylist::const_iterator unsorted_begin() const;
+	keylist::const_iterator unsorted_end() const;
+	keylist::iterator unsorted_begin();
+	keylist::iterator unsorted_end();
 };
 
 // removes unimportant parts from line

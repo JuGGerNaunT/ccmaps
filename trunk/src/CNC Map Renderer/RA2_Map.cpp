@@ -161,6 +161,7 @@ void RA2_Map::LoadMap() {
 	std::cout << "Recalculating object palets" << std::endl;
 	Apply_Palet_Overrides();
 }
+
 void RA2_Map::DetermineMapType() {
 	std::string ext = this->MapINI.get_name();
 	ext = ext.substr(ext.length() - 3);
@@ -618,8 +619,8 @@ void RA2_Map::Create_Object_Palets() {
 			Overlay* Ovl = Get_Overlay(x, y);
 			if (Ovl->Exists) {
 				Palet_Type pt = myTheater.OverlayTypes.Get_Palet(Ovl->num);
-				const Palet& p(myTheater.Get_Palet(pt));
-				Ovl->P = p.Get_Copy_Height(T->Z + myTheater.OverlayTypes.Get_Height_Offset(Ovl->num));
+				//const Palet& p(myTheater.Get_Palet(pt));
+				Ovl->P = myTheater.Get_Palet(pt).Get_Copy_Height(T->Z + myTheater.OverlayTypes.Get_Height_Offset(Ovl->num));
 			} //MIN_ORE-MAX_ORE, MIN_GEMS-MAX_GEMS 102-127, 27-38
 
 			Terrain* Ter = Get_Terrain(x, y);
@@ -777,9 +778,15 @@ void RA2_Map::Draw() {
 //		int x = x_;
 //		for (int y = 0; y < Size.h * 2; y++) {
 //			x--;
-	for (int y = 0; y < Size.h * 2; y++) {
-		for (int x = 0 ; x < Size.w * 2; x++) {
 
+//	for (int x_ = 0; x_ < (Size.w+Size.h) * 2; x_++) {
+//		int x = x_ + 1;
+//		for (int y = 0; y <= Size.h * 2; y++) {
+//			x--;
+//
+	for (int x = 0 ; x < Size.w * 2; x++) {
+		for (int y = 0; y < Size.h * 2; y++) {
+//		for (int x = Size.w * 2 - 1 ; x >= 0; x--) {
 			if (x < 0 || x >= Size.w * 2 || y < 0 || y >= Size.h * 2)
 				continue;
 
@@ -807,12 +814,6 @@ void RA2_Map::Draw() {
 				}
 			}
 
-			// Draw structures
-			Structure* Str = Get_Structure(x, y);
-			if (Str->Exists) {
-				myTheater.Draw_Structure(Str, MapSurface);
-			}
-			
 			// Draw infantry
 			Infantry* Inf = Get_Infantry(x, y);
 			if (Inf->Exists) {
@@ -825,6 +826,12 @@ void RA2_Map::Draw() {
 				myTheater.Draw_Unit(Unit, MapSurface);
 			}
 
+			// Draw structures
+			Structure* Str = Get_Structure(x, y);
+			if (Str->Exists) {
+				myTheater.Draw_Structure(Str, MapSurface);
+			}
+			
 			// Draw aircraft
 			Aircraft* Aircraft = Get_Aircraft(x, y);
 			if (Aircraft->Exists) {
