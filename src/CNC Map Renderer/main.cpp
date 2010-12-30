@@ -137,7 +137,7 @@ int main(int argc, char* argv[]) {
 	else outdir = opt.getValue('d');
 
 	bool use_localsize = !opt.getFlag("F");
-	
+
 	cout << "Loading map " << infile << ".." << endl;
 	ini_file MapINI(infile);
 	Map_Type M = UKN;
@@ -182,7 +182,7 @@ int main(int argc, char* argv[]) {
 					pkt_mapname = infile_nopath;
 			}
 			else if (pkt_mapname == "") {
-				// fallback for multiplayer maps with, .map extension, 
+				// fallback for multiplayer maps with, .map extension,
 				// no YR objects so assumed to be ra2, but actually meant to be used on yr
 				if (!isyr && ext == ".map" && !pkt.has_section(infile_nopath) && basic.read_bool("MultiplayerOnly")) {
 					pktfile = "missionsmd.pkt";
@@ -239,7 +239,6 @@ int main(int argc, char* argv[]) {
 					}
 				}
 			}
-
 		}
 		// 3) On unofficial maps, name specified in basic section
 		else if (outfile == "" /*&& basic.read_bool("Official") == false*/) {
@@ -253,7 +252,7 @@ int main(int argc, char* argv[]) {
 		outfile = infile_nopath;
 		boost::algorithm::to_lower(outfile);
 	}
-	
+
 	/* map renamign shit
 	// unload vfs
 	vfs.remove_all();
@@ -278,7 +277,7 @@ int main(int argc, char* argv[]) {
 
 	if (opt.getFlag('r'))
 		myMap.fuck_Ore();
-	
+
 	myMap.Draw();
 
 	if (opt.getFlag('S'))
