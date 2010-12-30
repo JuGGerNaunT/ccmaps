@@ -36,7 +36,7 @@ void TMP_Collection::Initialize(Theater_Type T) {
 	// Load general information
 	// Could also get from INI but this caching mechanism will out-do in the end
 #pragma region INI keys caching
-
+	
 	ACliffMMPieces 		= General.read_int("ACliffMMPieces", -1);
 	ACliffPieces 		= General.read_int("ACliffPieces", -1);
 	BlackTile 			= General.read_int("BlackTile", -1);

@@ -81,7 +81,7 @@ int Decode_5(const unsigned char* s, unsigned char* d, int cb_s, int format)
 // Decodes old SHP images, Overlay sections, maybe more
 int Decode_80(const unsigned char image_in[], unsigned char image_out[])
 {
-    #ifdef WIN32
+    #ifndef WIN32
 	int cb_out;
 	/*
 	0 copy 0cccpppp p
