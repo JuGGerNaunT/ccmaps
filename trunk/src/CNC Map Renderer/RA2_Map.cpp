@@ -40,7 +40,7 @@ RA2_Map::RA2_Map(ini_file& Map, Map_Type M) : MapINI(Map) {
 
 	ReadObjects();
 	if (M == UKN) DetermineMapType();
-	rules = boost::shared_ptr<ini_file>(new ini_file(vfs.open(this->M == YR ? "rulesmd.ini" : "rules.ini"))); 
+	rules = boost::shared_ptr<ini_file>(new ini_file(vfs.open(this->M == YR ? "rulesmd.ini" : "rules.ini")));
 
 	DetermineTheaterType();
 
@@ -62,10 +62,8 @@ bool RA2_Map::All_Objects_RA2() {
 
 	for (int y = 0; y < Size.h * 2; y++) {
 		for (int x = 0; x < Size.w * 2; x++) {
-
 			Tile* T = Get_Tile(x, y);
 			if (T->Exists) {
-
 			}
 			else continue;
 
@@ -77,7 +75,7 @@ bool RA2_Map::All_Objects_RA2() {
 			Terrain* Ter = Get_Terrain(x, y);
 			if (Ter->Exists) {
 				string terr_idx = terrain.lookup(Ter->name);
-				if (terr_idx == "" || boost::lexical_cast<int>(terr_idx) > 73) 
+				if (terr_idx == "" || boost::lexical_cast<int>(terr_idx) > 73)
 					return false;
 			}
 
@@ -108,7 +106,7 @@ bool RA2_Map::All_Objects_RA2() {
 				if (vehicle_idx == "" || boost::lexical_cast<int>(vehicle_idx) > 57)
 					return false;
 			}
-			
+
 			Aircraft* A = Get_Aircraft(x, y);
 			if (A->Exists) {
 				string aircraft_idx = aircraft.lookup(A->name);
@@ -122,8 +120,8 @@ bool RA2_Map::All_Objects_RA2() {
 
 void RA2_Map::ReadObjects() {
 	std::cout << "Reading tiles" << std::endl;
-	Read_Tiles();	
-	
+	Read_Tiles();
+
 	std::cout << "Reading map overlay" << std::endl;
 	Read_Overlay();
 
@@ -132,16 +130,16 @@ void RA2_Map::ReadObjects() {
 
 	std::cout << "Reading map overlay objects" << std::endl;
 	Read_Terrain();
-	
+
 	std::cout << "Reading map terrain object" << std::endl;
 	Read_Smudges();
-	
+
 	std::cout << "Reading infantry on map" << std::endl;
 	Read_Infantry();
-	
+
 	std::cout << "Reading vehicles on map" << std::endl;
 	Read_Units();
-	
+
 	std::cout << "Reading aircraft on map" << std::endl;
 	Read_Aircraft();
 }
@@ -217,7 +215,6 @@ int RA2_Map::Get_Tile_Setnum(int x, int y, int assume) const {
 		return Get_Tile(x, y)->SetNum;
 	return assume;
 }
-
 
 void RA2_Map::Read_Tiles() {
 	ini_section& TileSection(MapINI.get_section("isomappack5"));
@@ -299,7 +296,6 @@ void RA2_Map::Fix_Tile_Layer() {
 
 	for (int y = 0; y < Size.h * 2; y++) {
 		for (int x = 0; x < Size.w * 2; x++) {
-
 			Tile* T = Get_Tile(x, y);
 
 			if (!T->Exists)
@@ -319,12 +315,10 @@ void RA2_Map::Fix_Tile_Layer() {
 	// Recalculate LAT system (tile connecting)
 	for (int y = 0; y < Size.h * 2; y++) {
 		for (int x = 0; x < Size.w * 2; x++) {
-
 			Tile* T = Get_Tile(x, y);
 
 			// If this tile is a LAT tile, we might have to connect it
 			if (tile_c.Is_LAT(T->SetNum)) {
-
 				// Find Tileset that contains the connecting pieces
 				int to_clat = tile_c.Get_CLAT_Set(T->SetNum);
 				// Which tile to use from that tileset
@@ -364,7 +358,7 @@ int RA2_Map::Cutoff_Height() {
 	int highest_height = 0;
 	for (int x = y % 2; x < Size.w * 2; x+=2) {
 		if (Get_Tile(x, y)->Exists)
-			highest_height = std::max(highest_height, Get_Tile(x, y)->Z);		
+			highest_height = std::max(highest_height, Get_Tile(x, y)->Z);
 	}
 	return highest_height;
 }
@@ -372,7 +366,6 @@ int RA2_Map::Cutoff_Height() {
 void RA2_Map::Fix_Ore() {
 	for (int y = 0; y < Size.h * 2; y++) {
 		for (int x = 0; x < Size.w * 2; x++) {
-
 			Overlay* O = Get_Overlay(x, y);
 
 			if (O->Exists) {
@@ -397,7 +390,6 @@ void RA2_Map::Fix_Ore() {
 					O->num = MIN_GEMS + num;
 				}
 			}
-
 		}
 	}
 }
@@ -456,7 +448,6 @@ void RA2_Map::Read_Overlay() {
 	}
 }
 
-
 void RA2_Map::Read_Terrain() {
 	if (!MapINI.set_current_section("terrain"))
 		return;
@@ -493,7 +484,6 @@ void RA2_Map::Read_Terrain() {
 }
 
 void RA2_Map::Read_Smudges() {
-
 	if (!MapINI.set_current_section("smudge"))
 		return;
 
@@ -531,7 +521,6 @@ void RA2_Map::Read_Smudges() {
 }
 
 void RA2_Map::Read_Structures() {
-
 	if (!MapINI.set_current_section("structures"))
 		return;
 
@@ -546,7 +535,7 @@ void RA2_Map::Read_Structures() {
 
 		if (splitline.size() < 5)
 			continue;
-	
+
 		int x, y, health;
 		try {
 			x = boost::lexical_cast<int>(splitline[3]);
@@ -607,7 +596,6 @@ bool is_lamp(string lamp) {
 void RA2_Map::Create_Object_Palets() {
 	for (int y = 0; y < Size.h * 2; y++) {
 		for (int x = 0; x < Size.w * 2; x++) {
-
 			Tile* T = Get_Tile(x, y);
 			if (T->Exists) {
 				Palet_Type pt = P_ISO;
@@ -662,7 +650,7 @@ void RA2_Map::Create_Object_Palets() {
 					Str->P.Remap(myTheater.Get_Country_Remap(Str->owner));
 				}
 			}
-			
+
 			Infantry* Inf = Get_Infantry(x, y);
 			if (Inf->Exists) {
 				Palet_Type pt = myTheater.InfantryTypes.Get_Palet(Inf->name);
@@ -670,7 +658,7 @@ void RA2_Map::Create_Object_Palets() {
 				Inf->P = p.Get_Copy_Height(T->Z + myTheater.InfantryTypes.Get_Height_Offset(Inf->name));
 				Inf->P.Remap(myTheater.Get_Country_Remap(Inf->owner));
 			}
-			
+
 			Unit* Unit = Get_Unit(x, y);
 			if (Unit->Exists) {
 				Palet_Type pt = myTheater.VehicleTypes.Get_Palet(Unit->name);
@@ -678,7 +666,7 @@ void RA2_Map::Create_Object_Palets() {
 				Unit->P = p.Get_Copy_Height(T->Z + myTheater.VehicleTypes.Get_Height_Offset(Unit->name));
 				Unit->P.Remap(myTheater.Get_Country_Remap(Unit->owner));
 			}
-			
+
 			Aircraft* Aircraft = Get_Aircraft(x, y);
 			if (Aircraft->Exists) {
 				Palet_Type pt = myTheater.AircraftTypes.Get_Palet(Aircraft->name);
@@ -686,7 +674,6 @@ void RA2_Map::Create_Object_Palets() {
 				Aircraft->P = p.Get_Copy_Height(T->Z + myTheater.AircraftTypes.Get_Height_Offset(Aircraft->name));
 				Aircraft->P.Remap(myTheater.Get_Country_Remap(Aircraft->owner));
 			}
-
 		}
 	}
 }
@@ -711,11 +698,10 @@ bool RA2_Map::within_foundation(int x, int y, int i, int j, int fx, int fy) {
 }
 
 bool RA2_Map::Can_Draw_Here(int x, int y) {
-
 	// Checks whether the foundation of terrain of structure
 	// should prevent overlay from being drawn here.
 
-	// The largest possible foundation is 4x4 so we only need 
+	// The largest possible foundation is 4x4 so we only need
 	// to search in that area of the map.
 
 	for (int i = x - 4; i <= x + 4; i++) {
@@ -755,65 +741,43 @@ void RA2_Map::Draw() {
 	//	int y = 0;
 	//	for (int x = Size.w * 2 - y_; x < Size.w * 2; y++) {
 	//		x++;
-	for (int y = 0; y < Size.h * 2; y++) {
-		for (int x = 0 ; x < Size.w * 2; x++) {
+	for (int ry = 0; ry < Size.h * 2; ry++) {
+		for (int rx = Size.w * 2 - 1; rx >= 0; rx--) {
+			int x = rx - ry + Size.w - 1;
+			int y = ry + rx - Size.w - 1;
+
 			if (x < 0 || x >= Size.w * 2 || y < 0 || y >= Size.h * 2)
 				continue;
 			Tile* T = Get_Tile(x, y);
 
 			// Draw overriding overlay shadows
 			Overlay* O = Get_Overlay(x, y);
+			bool draw_overlay_later = false;
 			if (O->Exists && Can_Draw_Here(x, y)) {
 				bool overr = myTheater.OverlayTypes.Get_Overrides(O->num);
-				if (overr)
-					myTheater.Draw_Overlay_Shadow(O, MapSurface);
+				if (overr) {
+					myTheater.Draw_Overlay(O, MapSurface);
+				}
+				else draw_overlay_later = true;
 			}
 
 			if (T->Exists) {
 				myTheater.Draw_Tile(T, MapSurface);
-			}	
+			}
 
-		}
-	}
-
-//	for (int x_ = 0; x_ < Size.w * 2 + Size.h * 2; x_++) {
-//		int x = x_;
-//		for (int y = 0; y < Size.h * 2; y++) {
-//			x--;
-
-//	for (int x_ = 0; x_ < (Size.w+Size.h) * 2; x_++) {
-//		int x = x_ + 1;
-//		for (int y = 0; y <= Size.h * 2; y++) {
-//			x--;
-//
-	for (int x = 0 ; x < Size.w * 2; x++) {
-		for (int y = 0; y < Size.h * 2; y++) {
-//		for (int x = Size.w * 2 - 1 ; x >= 0; x--) {
-			if (x < 0 || x >= Size.w * 2 || y < 0 || y >= Size.h * 2)
-				continue;
+			if (draw_overlay_later)
+				myTheater.Draw_Overlay_NoShadow(O, MapSurface);
 
 			// Draw smudges
 			Smudge* Smu = Get_Smudge(x, y);
 			if (Smu->Exists) {
 				myTheater.Draw_Smudge(Smu, MapSurface);
 			}
-			
+
 			// Draw terrain
 			Terrain* Ter = Get_Terrain(x, y);
 			if (Ter->Exists) {
 				myTheater.Draw_Terrain(Ter, MapSurface);
-			}
-
-			// Draw non-overriding overlay
-			Overlay* O = Get_Overlay(x, y);
-			if (O->Exists && Can_Draw_Here(x, y)) {
-				bool overr = myTheater.OverlayTypes.Get_Overrides(O->num);
-				if (!overr) {
-					myTheater.Draw_Overlay(O, MapSurface);
-				}
-				else {
-					myTheater.Draw_Overlay_NoShadow(O, MapSurface);
-				}
 			}
 
 			// Draw infantry
@@ -821,7 +785,7 @@ void RA2_Map::Draw() {
 			if (Inf->Exists) {
 				myTheater.Draw_Infantry(Inf, MapSurface);
 			}
-			
+
 			// Draw vehicles
 			Unit* Unit = Get_Unit(x, y);
 			if (Unit->Exists) {
@@ -833,17 +797,15 @@ void RA2_Map::Draw() {
 			if (Str->Exists) {
 				myTheater.Draw_Structure(Str, MapSurface);
 			}
-			
+
 			// Draw aircraft
 			Aircraft* Aircraft = Get_Aircraft(x, y);
 			if (Aircraft->Exists) {
 				myTheater.Draw_Aircraft(Aircraft, MapSurface);
 			}
-
 		}
 	}
 }
-
 
 Tile* RA2_Map::Get_Tile(int x, int y) {
 	return &TileLayer[Tile_Index(x,y)];
@@ -911,7 +873,6 @@ const Aircraft* RA2_Map::Get_Aircraft(int x, int y) const {
 
 // Applies LightSources on every tile
 void RA2_Map::Apply_Lamps() {
-
 	// load all maps
 	for (int y = 0; y < Size.h * 2; y++) {
 		for (int x = 0; x < Size.w * 2; x++) {
@@ -921,7 +882,7 @@ void RA2_Map::Apply_Lamps() {
 			Structure* S = Get_Structure(x, y);
 			if (!S->Exists) continue;
 			else if (S->owner != "neutral") continue;
-		
+
 			// We have a lamp here
 			const Lighting* l = myTheater.Get_Lighting();
 			LightSource LS(myTheater.Get_Object_INI(S->name), l);
@@ -935,7 +896,6 @@ void RA2_Map::Apply_Lamps() {
 
 	for (int y = 0; y < Size.h * 2; y++) {
 		for (int x = 0; x < Size.w * 2; x++) {
-			
 			Tile* T = Get_Tile(x, y);
 			if (T->Exists) {
 				vector<LightSource>::const_iterator it;
@@ -949,27 +909,24 @@ void RA2_Map::Apply_Lamps() {
 				vector<LightSource>::const_iterator it;
 				for (it = LightSources.begin(); it != LightSources.end(); it++) {
 					it->Apply_Lamp(Ovl);
-				}			
+				}
 			}
 
-			
 			Terrain* Ter = Get_Terrain(x, y);
 			if (Ter->Exists) {
 				vector<LightSource>::const_iterator it;
 				for (it = LightSources.begin(); it != LightSources.end(); it++) {
 					it->Apply_Lamp(Ter);
-				}			
+				}
 			}
-			
 
 			Smudge* Smu = Get_Smudge(x, y);
 			if (Smu->Exists) {
 				vector<LightSource>::const_iterator it;
 				for (it = LightSources.begin(); it != LightSources.end(); it++) {
 					it->Apply_Lamp(Smu);
-				}			
+				}
 			}*/
-
 		}
 	}
 }
@@ -1003,7 +960,7 @@ void RA2_Map::Apply_Palet_Overrides() {
 			if (Str->Exists) {
 				Str->P.Recalculate();
 			}
-			
+
 			Infantry* Inf = Get_Infantry(x, y);
 			if (Inf->Exists) {
 				Inf->P.Recalculate();
@@ -1022,12 +979,11 @@ void RA2_Map::Apply_Palet_Overrides() {
 	}
 }
 
-
 void RA2_Map::SaveJPEG(const std::string& path, const std::string& name, int quality) {
 	// only visible part of map
 	int left =  std::max(LocalSize.x * 60, 0),
 		top  =  std::max(LocalSize.y * 30 - 90, 0);
-	int width    =  LocalSize.w * 60; 
+	int width    =  LocalSize.w * 60;
 	int height   =  LocalSize.h * 30 + 135;
 	int height2  =  (Size.h - ((Cutoff_Height() / 2 - 1) % 2)) * 30;
 	height = std::min(height, height2);
@@ -1056,7 +1012,6 @@ void RA2_Map::Draw_Startpos_Squares() {
 
 	keymap::const_iterator it;
 	for (it = waypoints.begin(); it != waypoints.end(); it++) {
-
 		if (boost::lexical_cast<int>(it->first) >= 8)
 			continue;
 
@@ -1074,7 +1029,7 @@ void RA2_Map::Draw_Startpos_Squares() {
 
 		int dest_x = dx * 30;
 		int dest_y = dy * 15 - 15 * tl->Z + 15;
-		
+
 		bool vert = Size.h * 2 > Size.w;
 		int radius = 0;
 		if (vert) {
@@ -1102,20 +1057,19 @@ void RA2_Map::Draw_Startpos_Tiles() {
 	if (!MapINI.set_current_section("Waypoints")) return;
 	ini_section& waypoints(MapINI.get_current_section());
 
-	static int fourxfour[][2] = { 
-				{+0, -2}, 
-			{-1, -1}, {+1, -1}, 
+	static int fourxfour[][2] = {
+				{+0, -2},
+			{-1, -1}, {+1, -1},
 		{-2, +0}, {+0, +0}, {+2, +0},
 	{-3, +1}, {-1, +1}, {+1, +1}, {+3, +1},
 		{-2, +2}, {+0, +2}, {+2, +2},
 			{-1, +3}, {+1, +3},
-				{+0, +4} 
+				{+0, +4}
 	};
 
 	Palet red = Palet::MakeRedPalet();
 	keymap::const_iterator it;
 	for (it = waypoints.begin(); it != waypoints.end(); it++) {
-		
 		if (boost::lexical_cast<int>(it->first) >= 8)
 			continue;
 
@@ -1134,20 +1088,18 @@ void RA2_Map::Draw_Startpos_Tiles() {
 				T->P = Palet::MergePalets(T->P, red, 0.4);
 			}
 		}
-	}	
+	}
 }
 
 void RA2_Map::fuck_Ore() {
-
 	Palet yellow = Palet::MakeYellowPalet();
 	Palet purple = Palet::MakePurplePalet();
 
 	for (int y = 0; y < Size.h * 2; y++) {
 		for (int x = 0; x < Size.w * 2; x++) {
-
 			Overlay* O = Get_Overlay(x, y);
 
-			if (!O->Exists) 
+			if (!O->Exists)
 				continue;
 
 			if ((O->num >= MIN_ORE) && (O->num <= MAX_ORE)) {
@@ -1166,7 +1118,6 @@ void RA2_Map::fuck_Ore() {
 }
 
 void RA2_Map::Read_Infantry() {
-
 	if (!MapINI.set_current_section("Infantry"))
 		return;
 
@@ -1204,9 +1155,7 @@ void RA2_Map::Read_Infantry() {
 	}
 }
 
-
 void RA2_Map::Read_Units() {
-
 	if (!MapINI.set_current_section("Units"))
 		return;
 
@@ -1245,7 +1194,6 @@ void RA2_Map::Read_Units() {
 }
 
 void RA2_Map::Read_Aircraft() {
-
 	if (!MapINI.set_current_section("Aircraft"))
 		return;
 

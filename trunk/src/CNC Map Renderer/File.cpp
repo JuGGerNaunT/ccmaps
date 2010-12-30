@@ -9,7 +9,7 @@ using std::string;
 
 int File::read(vector<unsigned char>& buf, int count)
 {
-	if (writable_) { 
+	if (writable_) {
 		throw std::logic_error("File not readable");
 	}
 
@@ -82,7 +82,6 @@ vector<string>& File::read_all_lines(vector<string>& ret) {
 	boost::split(ret, str, boost::is_any_of("\r\n"));
 	return ret;
 }
-
 
 //-------------------------------------------------------------------------
 
