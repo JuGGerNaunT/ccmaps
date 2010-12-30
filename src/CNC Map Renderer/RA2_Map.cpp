@@ -10,6 +10,7 @@
 #include <boost/lexical_cast.hpp>
 #include <algorithm>
 #include <iostream>
+#include "CCRC.h"
 
 using std::string;
 using std::vector;
@@ -414,6 +415,7 @@ void RA2_Map::Read_Overlay() {
 	// decode from lzo
 	unsigned char OverlayPack[1 << 18];
 	test = Decode_5(d, OverlayPack, test, 80);
+	
 	assert(test == 1 << 18);
 	delete[] d;
 
