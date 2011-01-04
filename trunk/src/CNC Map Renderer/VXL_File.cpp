@@ -4,6 +4,9 @@
 #include <string.h>
 #include <sstream>
 #include "VoxelRenderer.h"
+
+#include "VFS.h"
+
 char const VXL_File::fileTypeText[] = "Voxel Animation";
 
 void VXL_File::Initialize() {
@@ -634,8 +637,12 @@ float const VXL_File::TSNormals[TS_NUM_NORMALS][3] = {
 
 
 void VXL_File::Draw(const int x_off, const int y_off, const int direction, DrawingSurface& dst, const Palet* p) {
+	this->hva = boost::shared_ptr<HVA_File>(new HVA_File(vfs.open("shad.hva")));
+	this->vxl = vfs.open("shad.vxl");
+
 	Initialize();
 	if (!hva || !hva->initialized || !initialized) return;
+
 	DrawingSurface* vxl_ds = voxelrenderer.render(this, this->hva.get(), -(double)direction / 256.0 * 360 + 45, p);
 	for (int y = 0; y < vxl_ds->Get_Height(); y++) {
 			// rows inverted!		
