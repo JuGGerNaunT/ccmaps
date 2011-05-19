@@ -30,22 +30,41 @@
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.panel2 = new System.Windows.Forms.Panel();
+			this.radioButton6 = new System.Windows.Forms.RadioButton();
+			this.radioButton8 = new System.Windows.Forms.RadioButton();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.rbForceFS = new System.Windows.Forms.RadioButton();
+			this.rbForceTS = new System.Windows.Forms.RadioButton();
+			this.radioButton4 = new System.Windows.Forms.RadioButton();
+			this.rbForceRA2 = new System.Windows.Forms.RadioButton();
+			this.radioButton3 = new System.Windows.Forms.RadioButton();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.checkBox4 = new System.Windows.Forms.CheckBox();
 			this.checkBox2 = new System.Windows.Forms.CheckBox();
 			this.checkBox3 = new System.Windows.Forms.CheckBox();
-			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.gbInput = new System.Windows.Forms.GroupBox();
+			this.tbCustomOutput = new System.Windows.Forms.TextBox();
+			this.tbRenderProg = new System.Windows.Forms.TextBox();
+			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
-			this.button3 = new System.Windows.Forms.Button();
+			this.radioButton2 = new System.Windows.Forms.RadioButton();
+			this.btnBrowseRenderer = new System.Windows.Forms.Button();
+			this.radioButton1 = new System.Windows.Forms.RadioButton();
 			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
-			this.button2 = new System.Windows.Forms.Button();
+			this.btnBrowseMixDir = new System.Windows.Forms.Button();
+			this.label2 = new System.Windows.Forms.Label();
 			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
-			this.button1 = new System.Windows.Forms.Button();
+			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+			this.btnBrowseInput = new System.Windows.Forms.Button();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.PNG = new System.Windows.Forms.CheckBox();
+			this.nudCompression = new System.Windows.Forms.NumericUpDown();
 			this.button4 = new System.Windows.Forms.Button();
 			this.textBox5 = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
@@ -53,30 +72,13 @@
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.textBox6 = new System.Windows.Forms.TextBox();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-			this.PNG = new System.Windows.Forms.CheckBox();
-			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
-			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.radioButton1 = new System.Windows.Forms.RadioButton();
-			this.radioButton2 = new System.Windows.Forms.RadioButton();
-			this.label11 = new System.Windows.Forms.Label();
-			this.textBox4 = new System.Windows.Forms.TextBox();
-			this.radioButton3 = new System.Windows.Forms.RadioButton();
-			this.radioButton4 = new System.Windows.Forms.RadioButton();
-			this.radioButton5 = new System.Windows.Forms.RadioButton();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel2 = new System.Windows.Forms.Panel();
-			this.radioButton6 = new System.Windows.Forms.RadioButton();
-			this.radioButton8 = new System.Windows.Forms.RadioButton();
 			this.groupBox2.SuspendLayout();
-			this.groupBox3.SuspendLayout();
-			this.groupBox4.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
+			this.panel1.SuspendLayout();
+			this.gbInput.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudCompression)).BeginInit();
+			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox2
@@ -95,8 +97,108 @@
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Misc. Options";
-			this.groupBox2.DragDrop += new System.Windows.Forms.DragEventHandler(this.groupBox3_DragDrop);
-			this.groupBox2.DragEnter += new System.Windows.Forms.DragEventHandler(this.groupBox3_DragEnter);
+			this.groupBox2.DragDrop += new System.Windows.Forms.DragEventHandler(this.gbInput_DragDrop);
+			this.groupBox2.DragEnter += new System.Windows.Forms.DragEventHandler(this.gbInput_DragEnter);
+			// 
+			// panel2
+			// 
+			this.panel2.Controls.Add(this.radioButton6);
+			this.panel2.Controls.Add(this.radioButton8);
+			this.panel2.Location = new System.Drawing.Point(17, 199);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(461, 26);
+			this.panel2.TabIndex = 14;
+			// 
+			// radioButton6
+			// 
+			this.radioButton6.AutoSize = true;
+			this.radioButton6.Checked = true;
+			this.radioButton6.Location = new System.Drawing.Point(12, 4);
+			this.radioButton6.Name = "radioButton6";
+			this.radioButton6.Size = new System.Drawing.Size(110, 17);
+			this.radioButton6.TabIndex = 10;
+			this.radioButton6.TabStop = true;
+			this.radioButton6.Text = "Use map localsize";
+			this.radioButton6.UseVisualStyleBackColor = true;
+			this.radioButton6.CheckedChanged += new System.EventHandler(this.rbsEngine_CheckedChanged);
+			// 
+			// radioButton8
+			// 
+			this.radioButton8.AutoSize = true;
+			this.radioButton8.Location = new System.Drawing.Point(154, 4);
+			this.radioButton8.Name = "radioButton8";
+			this.radioButton8.Size = new System.Drawing.Size(175, 17);
+			this.radioButton8.TabIndex = 11;
+			this.radioButton8.Text = "Use full size (useful for missions)";
+			this.radioButton8.UseVisualStyleBackColor = true;
+			this.radioButton8.CheckedChanged += new System.EventHandler(this.rbsEngine_CheckedChanged);
+			// 
+			// panel1
+			// 
+			this.panel1.Controls.Add(this.rbForceFS);
+			this.panel1.Controls.Add(this.rbForceTS);
+			this.panel1.Controls.Add(this.radioButton4);
+			this.panel1.Controls.Add(this.rbForceRA2);
+			this.panel1.Controls.Add(this.radioButton3);
+			this.panel1.Location = new System.Drawing.Point(17, 167);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(461, 26);
+			this.panel1.TabIndex = 13;
+			// 
+			// rbForceFS
+			// 
+			this.rbForceFS.AutoSize = true;
+			this.rbForceFS.Location = new System.Drawing.Point(383, 4);
+			this.rbForceFS.Name = "rbForceFS";
+			this.rbForceFS.Size = new System.Drawing.Size(68, 17);
+			this.rbForceFS.TabIndex = 14;
+			this.rbForceFS.Text = "Force FS";
+			this.rbForceFS.UseVisualStyleBackColor = true;
+			// 
+			// rbForceTS
+			// 
+			this.rbForceTS.AutoSize = true;
+			this.rbForceTS.Location = new System.Drawing.Point(308, 3);
+			this.rbForceTS.Name = "rbForceTS";
+			this.rbForceTS.Size = new System.Drawing.Size(69, 17);
+			this.rbForceTS.TabIndex = 13;
+			this.rbForceTS.Text = "Force TS";
+			this.rbForceTS.UseVisualStyleBackColor = true;
+			// 
+			// radioButton4
+			// 
+			this.radioButton4.AutoSize = true;
+			this.radioButton4.Checked = true;
+			this.radioButton4.Location = new System.Drawing.Point(12, 4);
+			this.radioButton4.Name = "radioButton4";
+			this.radioButton4.Size = new System.Drawing.Size(132, 17);
+			this.radioButton4.TabIndex = 10;
+			this.radioButton4.TabStop = true;
+			this.radioButton4.Text = "Automatic engine rules";
+			this.radioButton4.UseVisualStyleBackColor = true;
+			this.radioButton4.CheckedChanged += new System.EventHandler(this.rbsEngine_CheckedChanged);
+			// 
+			// rbForceRA2
+			// 
+			this.rbForceRA2.AutoSize = true;
+			this.rbForceRA2.Location = new System.Drawing.Point(226, 4);
+			this.rbForceRA2.Name = "rbForceRA2";
+			this.rbForceRA2.Size = new System.Drawing.Size(76, 17);
+			this.rbForceRA2.TabIndex = 12;
+			this.rbForceRA2.Text = "Force RA2";
+			this.rbForceRA2.UseVisualStyleBackColor = true;
+			this.rbForceRA2.CheckedChanged += new System.EventHandler(this.rbsEngine_CheckedChanged);
+			// 
+			// radioButton3
+			// 
+			this.radioButton3.AutoSize = true;
+			this.radioButton3.Location = new System.Drawing.Point(150, 3);
+			this.radioButton3.Name = "radioButton3";
+			this.radioButton3.Size = new System.Drawing.Size(70, 17);
+			this.radioButton3.TabIndex = 11;
+			this.radioButton3.Text = "Force YR";
+			this.radioButton3.UseVisualStyleBackColor = true;
+			this.radioButton3.CheckedChanged += new System.EventHandler(this.rbsEngine_CheckedChanged);
 			// 
 			// label7
 			// 
@@ -157,43 +259,61 @@
 			this.checkBox3.UseVisualStyleBackColor = true;
 			this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
 			// 
-			// groupBox3
+			// gbInput
 			// 
-			this.groupBox3.Controls.Add(this.textBox4);
-			this.groupBox3.Controls.Add(this.textBox3);
-			this.groupBox3.Controls.Add(this.label11);
-			this.groupBox3.Controls.Add(this.label10);
-			this.groupBox3.Controls.Add(this.radioButton2);
-			this.groupBox3.Controls.Add(this.button3);
-			this.groupBox3.Controls.Add(this.radioButton1);
-			this.groupBox3.Controls.Add(this.textBox2);
-			this.groupBox3.Controls.Add(this.label9);
-			this.groupBox3.Controls.Add(this.button2);
-			this.groupBox3.Controls.Add(this.label2);
-			this.groupBox3.Controls.Add(this.textBox1);
-			this.groupBox3.Controls.Add(this.label1);
-			this.groupBox3.Controls.Add(this.label8);
-			this.groupBox3.Controls.Add(this.numericUpDown2);
-			this.groupBox3.Controls.Add(this.button1);
-			this.groupBox3.Controls.Add(this.checkBox1);
-			this.groupBox3.Controls.Add(this.PNG);
-			this.groupBox3.Controls.Add(this.numericUpDown1);
-			this.groupBox3.Location = new System.Drawing.Point(12, 9);
-			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(544, 194);
-			this.groupBox3.TabIndex = 0;
-			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "Input";
-			this.groupBox3.DragDrop += new System.Windows.Forms.DragEventHandler(this.groupBox3_DragDrop);
-			this.groupBox3.DragEnter += new System.Windows.Forms.DragEventHandler(this.groupBox3_DragEnter);
+			this.gbInput.Controls.Add(this.tbCustomOutput);
+			this.gbInput.Controls.Add(this.tbRenderProg);
+			this.gbInput.Controls.Add(this.label11);
+			this.gbInput.Controls.Add(this.label10);
+			this.gbInput.Controls.Add(this.radioButton2);
+			this.gbInput.Controls.Add(this.btnBrowseRenderer);
+			this.gbInput.Controls.Add(this.radioButton1);
+			this.gbInput.Controls.Add(this.textBox2);
+			this.gbInput.Controls.Add(this.label9);
+			this.gbInput.Controls.Add(this.btnBrowseMixDir);
+			this.gbInput.Controls.Add(this.label2);
+			this.gbInput.Controls.Add(this.textBox1);
+			this.gbInput.Controls.Add(this.label1);
+			this.gbInput.Controls.Add(this.label8);
+			this.gbInput.Controls.Add(this.numericUpDown2);
+			this.gbInput.Controls.Add(this.btnBrowseInput);
+			this.gbInput.Controls.Add(this.checkBox1);
+			this.gbInput.Controls.Add(this.PNG);
+			this.gbInput.Controls.Add(this.nudCompression);
+			this.gbInput.Location = new System.Drawing.Point(12, 9);
+			this.gbInput.Name = "gbInput";
+			this.gbInput.Size = new System.Drawing.Size(544, 194);
+			this.gbInput.TabIndex = 0;
+			this.gbInput.TabStop = false;
+			this.gbInput.Text = "Input";
+			this.gbInput.DragDrop += new System.Windows.Forms.DragEventHandler(this.gbInput_DragDrop);
+			this.gbInput.DragEnter += new System.Windows.Forms.DragEventHandler(this.gbInput_DragEnter);
+			// 
+			// tbCustomOutput
+			// 
+			this.tbCustomOutput.Location = new System.Drawing.Point(302, 142);
+			this.tbCustomOutput.Name = "tbCustomOutput";
+			this.tbCustomOutput.Size = new System.Drawing.Size(219, 20);
+			this.tbCustomOutput.TabIndex = 10;
+			this.tbCustomOutput.Visible = false;
+			this.tbCustomOutput.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
 			// 
 			// textBox3
 			// 
-			this.textBox3.Location = new System.Drawing.Point(131, 67);
-			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new System.Drawing.Size(298, 20);
-			this.textBox3.TabIndex = 7;
-			this.textBox3.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+			this.tbRenderProg.Location = new System.Drawing.Point(131, 67);
+			this.tbRenderProg.Name = "textBox3";
+			this.tbRenderProg.Size = new System.Drawing.Size(298, 20);
+			this.tbRenderProg.TabIndex = 7;
+			this.tbRenderProg.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(14, 165);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(515, 17);
+			this.label11.TabIndex = 11;
+			this.label11.Text = "Automatic filename resolution uses CSF, missions.ini or [Basic]/Name if possible." +
+				"\r\n";
 			// 
 			// label10
 			// 
@@ -204,15 +324,39 @@
 			this.label10.TabIndex = 6;
 			this.label10.Text = "Map render program";
 			// 
-			// button3
+			// radioButton2
 			// 
-			this.button3.Location = new System.Drawing.Point(435, 67);
-			this.button3.Name = "button3";
-			this.button3.Size = new System.Drawing.Size(75, 23);
-			this.button3.TabIndex = 8;
-			this.button3.Text = "Browse";
-			this.button3.UseVisualStyleBackColor = true;
-			this.button3.Click += new System.EventHandler(this.button3_Click);
+			this.radioButton2.AutoSize = true;
+			this.radioButton2.Location = new System.Drawing.Point(173, 143);
+			this.radioButton2.Name = "radioButton2";
+			this.radioButton2.Size = new System.Drawing.Size(102, 17);
+			this.radioButton2.TabIndex = 9;
+			this.radioButton2.Text = "Custom filename";
+			this.radioButton2.UseVisualStyleBackColor = true;
+			this.radioButton2.CheckedChanged += new System.EventHandler(this.rbCustomOutput_CheckedChanged);
+			// 
+			// btnBrowseRenderer
+			// 
+			this.btnBrowseRenderer.Location = new System.Drawing.Point(435, 67);
+			this.btnBrowseRenderer.Name = "btnBrowseRenderer";
+			this.btnBrowseRenderer.Size = new System.Drawing.Size(75, 23);
+			this.btnBrowseRenderer.TabIndex = 8;
+			this.btnBrowseRenderer.Text = "Browse";
+			this.btnBrowseRenderer.UseVisualStyleBackColor = true;
+			this.btnBrowseRenderer.Click += new System.EventHandler(this.btnBrowseRenderer_Click);
+			// 
+			// radioButton1
+			// 
+			this.radioButton1.AutoSize = true;
+			this.radioButton1.Checked = true;
+			this.radioButton1.Location = new System.Drawing.Point(31, 143);
+			this.radioButton1.Name = "radioButton1";
+			this.radioButton1.Size = new System.Drawing.Size(114, 17);
+			this.radioButton1.TabIndex = 8;
+			this.radioButton1.TabStop = true;
+			this.radioButton1.Text = "Automatic filename";
+			this.radioButton1.UseVisualStyleBackColor = true;
+			this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
 			// 
 			// textBox2
 			// 
@@ -231,15 +375,25 @@
 			this.label9.TabIndex = 3;
 			this.label9.Text = "Mix files";
 			// 
-			// button2
+			// btnBrowseMixDir
 			// 
-			this.button2.Location = new System.Drawing.Point(435, 41);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(75, 23);
-			this.button2.TabIndex = 5;
-			this.button2.Text = "Browse";
-			this.button2.UseVisualStyleBackColor = true;
-			this.button2.Click += new System.EventHandler(this.button2_Click);
+			this.btnBrowseMixDir.Location = new System.Drawing.Point(435, 41);
+			this.btnBrowseMixDir.Name = "btnBrowseMixDir";
+			this.btnBrowseMixDir.Size = new System.Drawing.Size(75, 23);
+			this.btnBrowseMixDir.TabIndex = 5;
+			this.btnBrowseMixDir.Text = "Browse";
+			this.btnBrowseMixDir.UseVisualStyleBackColor = true;
+			this.btnBrowseMixDir.Click += new System.EventHandler(this.btnBrowseMixDir_Click);
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(132, 120);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(85, 13);
+			this.label2.TabIndex = 5;
+			this.label2.Text = "Encoding quality";
+			this.label2.Visible = false;
 			// 
 			// textBox1
 			// 
@@ -248,6 +402,15 @@
 			this.textBox1.Size = new System.Drawing.Size(298, 20);
 			this.textBox1.TabIndex = 1;
 			this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(132, 98);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(92, 13);
+			this.label1.TabIndex = 1;
+			this.label1.Text = "Compression level";
 			// 
 			// label8
 			// 
@@ -258,15 +421,71 @@
 			this.label8.TabIndex = 0;
 			this.label8.Text = "Input map";
 			// 
-			// button1
+			// numericUpDown2
 			// 
-			this.button1.Location = new System.Drawing.Point(435, 15);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 2;
-			this.button1.Text = "Browse";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.numericUpDown2.Location = new System.Drawing.Point(230, 119);
+			this.numericUpDown2.Name = "numericUpDown2";
+			this.numericUpDown2.Size = new System.Drawing.Size(43, 20);
+			this.numericUpDown2.TabIndex = 6;
+			this.numericUpDown2.Value = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
+			this.numericUpDown2.Visible = false;
+			this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+			// 
+			// btnBrowseInput
+			// 
+			this.btnBrowseInput.Location = new System.Drawing.Point(435, 15);
+			this.btnBrowseInput.Name = "btnBrowseInput";
+			this.btnBrowseInput.Size = new System.Drawing.Size(75, 23);
+			this.btnBrowseInput.TabIndex = 2;
+			this.btnBrowseInput.Text = "Browse";
+			this.btnBrowseInput.UseVisualStyleBackColor = true;
+			this.btnBrowseInput.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Checked = true;
+			this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox1.Location = new System.Drawing.Point(42, 119);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(81, 17);
+			this.checkBox1.TabIndex = 4;
+			this.checkBox1.Text = "Output JPG";
+			this.checkBox1.UseVisualStyleBackColor = true;
+			this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+			// 
+			// PNG
+			// 
+			this.PNG.AutoSize = true;
+			this.PNG.Location = new System.Drawing.Point(42, 97);
+			this.PNG.Name = "PNG";
+			this.PNG.Size = new System.Drawing.Size(84, 17);
+			this.PNG.TabIndex = 0;
+			this.PNG.Text = "Output PNG";
+			this.PNG.UseVisualStyleBackColor = true;
+			this.PNG.CheckedChanged += new System.EventHandler(this.PNG_CheckedChanged);
+			// 
+			// nudCompression
+			// 
+			this.nudCompression.Location = new System.Drawing.Point(230, 97);
+			this.nudCompression.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+			this.nudCompression.Name = "nudCompression";
+			this.nudCompression.Size = new System.Drawing.Size(43, 20);
+			this.nudCompression.TabIndex = 2;
+			this.nudCompression.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+			this.nudCompression.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
 			// 
 			// button4
 			// 
@@ -300,7 +519,7 @@
 			// groupBox4
 			// 
 			this.groupBox4.Controls.Add(this.textBox6);
-			this.groupBox4.Location = new System.Drawing.Point(21, 469);
+			this.groupBox4.Location = new System.Drawing.Point(12, 532);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(532, 176);
 			this.groupBox4.TabIndex = 6;
@@ -318,230 +537,35 @@
 			this.textBox6.Size = new System.Drawing.Size(518, 151);
 			this.textBox6.TabIndex = 0;
 			// 
-			// PNG
-			// 
-			this.PNG.AutoSize = true;
-			this.PNG.Location = new System.Drawing.Point(42, 97);
-			this.PNG.Name = "PNG";
-			this.PNG.Size = new System.Drawing.Size(84, 17);
-			this.PNG.TabIndex = 0;
-			this.PNG.Text = "Output PNG";
-			this.PNG.UseVisualStyleBackColor = true;
-			this.PNG.CheckedChanged += new System.EventHandler(this.PNG_CheckedChanged);
-			// 
-			// numericUpDown1
-			// 
-			this.numericUpDown1.Location = new System.Drawing.Point(230, 97);
-			this.numericUpDown1.Maximum = new decimal(new int[] {
-            9,
-            0,
-            0,
-            0});
-			this.numericUpDown1.Name = "numericUpDown1";
-			this.numericUpDown1.Size = new System.Drawing.Size(43, 20);
-			this.numericUpDown1.TabIndex = 2;
-			this.numericUpDown1.Value = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
-			this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-			// 
-			// checkBox1
-			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Checked = true;
-			this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox1.Location = new System.Drawing.Point(42, 119);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(81, 17);
-			this.checkBox1.TabIndex = 4;
-			this.checkBox1.Text = "Output JPG";
-			this.checkBox1.UseVisualStyleBackColor = true;
-			this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-			// 
-			// numericUpDown2
-			// 
-			this.numericUpDown2.Location = new System.Drawing.Point(230, 119);
-			this.numericUpDown2.Name = "numericUpDown2";
-			this.numericUpDown2.Size = new System.Drawing.Size(43, 20);
-			this.numericUpDown2.TabIndex = 6;
-			this.numericUpDown2.Value = new decimal(new int[] {
-            90,
-            0,
-            0,
-            0});
-			this.numericUpDown2.Visible = false;
-			this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(132, 98);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(92, 13);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Compression level";
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(132, 120);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(85, 13);
-			this.label2.TabIndex = 5;
-			this.label2.Text = "Encoding quality";
-			this.label2.Visible = false;
-			// 
-			// radioButton1
-			// 
-			this.radioButton1.AutoSize = true;
-			this.radioButton1.Checked = true;
-			this.radioButton1.Location = new System.Drawing.Point(31, 143);
-			this.radioButton1.Name = "radioButton1";
-			this.radioButton1.Size = new System.Drawing.Size(114, 17);
-			this.radioButton1.TabIndex = 8;
-			this.radioButton1.TabStop = true;
-			this.radioButton1.Text = "Automatic filename";
-			this.radioButton1.UseVisualStyleBackColor = true;
-			this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-			// 
-			// radioButton2
-			// 
-			this.radioButton2.AutoSize = true;
-			this.radioButton2.Location = new System.Drawing.Point(173, 143);
-			this.radioButton2.Name = "radioButton2";
-			this.radioButton2.Size = new System.Drawing.Size(102, 17);
-			this.radioButton2.TabIndex = 9;
-			this.radioButton2.Text = "Custom filename";
-			this.radioButton2.UseVisualStyleBackColor = true;
-			this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
-			// 
-			// label11
-			// 
-			this.label11.Location = new System.Drawing.Point(14, 165);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(515, 17);
-			this.label11.TabIndex = 11;
-			this.label11.Text = "Automatic filename resolution uses CSF, missions.ini or [Basic]/Name if possible." +
-				"\r\n";
-			// 
-			// textBox4
-			// 
-			this.textBox4.Location = new System.Drawing.Point(302, 142);
-			this.textBox4.Name = "textBox4";
-			this.textBox4.Size = new System.Drawing.Size(219, 20);
-			this.textBox4.TabIndex = 10;
-			this.textBox4.Visible = false;
-			this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
-			// 
-			// radioButton3
-			// 
-			this.radioButton3.AutoSize = true;
-			this.radioButton3.Location = new System.Drawing.Point(154, 4);
-			this.radioButton3.Name = "radioButton3";
-			this.radioButton3.Size = new System.Drawing.Size(105, 17);
-			this.radioButton3.TabIndex = 11;
-			this.radioButton3.Text = "Force YR engine";
-			this.radioButton3.UseVisualStyleBackColor = true;
-			this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
-			// 
-			// radioButton4
-			// 
-			this.radioButton4.AutoSize = true;
-			this.radioButton4.Checked = true;
-			this.radioButton4.Location = new System.Drawing.Point(12, 4);
-			this.radioButton4.Name = "radioButton4";
-			this.radioButton4.Size = new System.Drawing.Size(132, 17);
-			this.radioButton4.TabIndex = 10;
-			this.radioButton4.TabStop = true;
-			this.radioButton4.Text = "Automatic engine rules";
-			this.radioButton4.UseVisualStyleBackColor = true;
-			this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
-			// 
-			// radioButton5
-			// 
-			this.radioButton5.AutoSize = true;
-			this.radioButton5.Location = new System.Drawing.Point(283, 4);
-			this.radioButton5.Name = "radioButton5";
-			this.radioButton5.Size = new System.Drawing.Size(111, 17);
-			this.radioButton5.TabIndex = 12;
-			this.radioButton5.Text = "Force RA2 engine";
-			this.radioButton5.UseVisualStyleBackColor = true;
-			this.radioButton5.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
-			// 
-			// panel1
-			// 
-			this.panel1.Controls.Add(this.radioButton4);
-			this.panel1.Controls.Add(this.radioButton5);
-			this.panel1.Controls.Add(this.radioButton3);
-			this.panel1.Location = new System.Drawing.Point(17, 167);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(461, 26);
-			this.panel1.TabIndex = 13;
-			// 
-			// panel2
-			// 
-			this.panel2.Controls.Add(this.radioButton6);
-			this.panel2.Controls.Add(this.radioButton8);
-			this.panel2.Location = new System.Drawing.Point(17, 199);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(461, 26);
-			this.panel2.TabIndex = 14;
-			// 
-			// radioButton6
-			// 
-			this.radioButton6.AutoSize = true;
-			this.radioButton6.Checked = true;
-			this.radioButton6.Location = new System.Drawing.Point(12, 4);
-			this.radioButton6.Name = "radioButton6";
-			this.radioButton6.Size = new System.Drawing.Size(110, 17);
-			this.radioButton6.TabIndex = 10;
-			this.radioButton6.TabStop = true;
-			this.radioButton6.Text = "Use map localsize";
-			this.radioButton6.UseVisualStyleBackColor = true;
-			this.radioButton6.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
-			// 
-			// radioButton8
-			// 
-			this.radioButton8.AutoSize = true;
-			this.radioButton8.Location = new System.Drawing.Point(154, 4);
-			this.radioButton8.Name = "radioButton8";
-			this.radioButton8.Size = new System.Drawing.Size(175, 17);
-			this.radioButton8.TabIndex = 11;
-			this.radioButton8.Text = "Use full size (useful for missions)";
-			this.radioButton8.UseVisualStyleBackColor = true;
-			this.radioButton8.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
-			// 
 			// MainForm
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(587, 467);
+			this.ClientSize = new System.Drawing.Size(669, 681);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.label12);
 			this.Controls.Add(this.textBox5);
 			this.Controls.Add(this.button4);
 			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.groupBox3);
+			this.Controls.Add(this.gbInput);
 			this.Name = "MainForm";
 			this.Text = "RA2/YR Map Renderer by Frank Razenberg";
 			this.Load += new System.EventHandler(this.MainForm_Load);
-			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.groupBox3_DragDrop);
-			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.groupBox3_DragEnter);
+			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.gbInput_DragDrop);
+			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.gbInput_DragEnter);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
-			this.groupBox3.ResumeLayout(false);
-			this.groupBox3.PerformLayout();
-			this.groupBox4.ResumeLayout(false);
-			this.groupBox4.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
+			this.gbInput.ResumeLayout(false);
+			this.gbInput.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudCompression)).EndInit();
+			this.groupBox4.ResumeLayout(false);
+			this.groupBox4.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -556,14 +580,14 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.GroupBox groupBox3;
-		private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.GroupBox gbInput;
+		private System.Windows.Forms.Button btnBrowseInput;
+        private System.Windows.Forms.TextBox tbRenderProg;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnBrowseRenderer;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnBrowseMixDir;
         private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Button button4;
@@ -573,7 +597,7 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-		private System.Windows.Forms.TextBox textBox4;
+		private System.Windows.Forms.TextBox tbCustomOutput;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.RadioButton radioButton2;
 		private System.Windows.Forms.RadioButton radioButton1;
@@ -582,14 +606,16 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown2;
 		private System.Windows.Forms.CheckBox checkBox1;
 		private System.Windows.Forms.CheckBox PNG;
-		private System.Windows.Forms.NumericUpDown numericUpDown1;
+		private System.Windows.Forms.NumericUpDown nudCompression;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.RadioButton radioButton6;
 		private System.Windows.Forms.RadioButton radioButton8;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.RadioButton radioButton4;
-		private System.Windows.Forms.RadioButton radioButton5;
+		private System.Windows.Forms.RadioButton rbForceRA2;
 		private System.Windows.Forms.RadioButton radioButton3;
+		private System.Windows.Forms.RadioButton rbForceFS;
+		private System.Windows.Forms.RadioButton rbForceTS;
 
     }
 }

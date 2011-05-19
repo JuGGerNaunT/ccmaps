@@ -1,51 +1,87 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using System.Diagnostics;
 
 namespace RA2Maps_GUI {
+
 	public partial class MainForm : Form {
+		public const string exe = "CNCMaps.exe";
+
 		public MainForm() {
 			InitializeComponent();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e) {
-			textBox3.Text = getrendererexe();
-			textBox2.Text = readmixdir();
+			tbRenderProg.Text = FindRenderProg();
+			textBox2.Text = GetMixDir();
 			UpdateCmd();
 		}
 
-		private string getrendererexe() {
+		private string FindRenderProg() {
 			try {
 				RegistryKey k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\CNC Map Render");
 				string s = (string)k.GetValue("");
 				k.Close();
-				return s + "\\cncmaprender.exe";
-
+				return s + "\\" + exe;
 			}
 			catch {
-				return System.IO.File.Exists("cncmaprender.exe") ? "cncmaprender.exe" : "";
+				return System.IO.File.Exists(exe) ? exe : "";
 			}
 		}
 
 		private void radioButton1_CheckedChanged(object sender, EventArgs e) {
-			textBox4.Visible = radioButton2.Checked;
+			tbCustomOutput.Visible = radioButton2.Checked;
 			UpdateCmd();
 		}
 
-		private void radioButton2_CheckedChanged(object sender, EventArgs e) {
-			textBox4.Visible = radioButton2.Checked;
+		private void rbCustomOutput_CheckedChanged(object sender, EventArgs e) {
+			tbCustomOutput.Visible = radioButton2.Checked;
 			UpdateCmd();
+		}
+
+		private void btnBrowseMixDir_Click(object sender, EventArgs e) {
+			folderBrowserDialog1.Description = "The directory that contains the mix files for RA2/YR.";
+			folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
+			folderBrowserDialog1.SelectedPath = GetMixDir();
+			folderBrowserDialog1.ShowNewFolderButton = false;
+			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+				textBox2.Text = folderBrowserDialog1.SelectedPath;
+		}
+
+		private void btnBrowseRenderer_Click(object sender, EventArgs e) {
+			openFileDialog1.CheckFileExists = true;
+			openFileDialog1.Multiselect = false;
+			openFileDialog1.Filter = "Executable (*.exe)|*.exe";
+			openFileDialog1.InitialDirectory = System.IO.Directory.GetCurrentDirectory();
+			openFileDialog1.FileName = "cncmaprender.exe";
+			if (openFileDialog1.ShowDialog() == DialogResult.OK) {
+				if (openFileDialog1.FileName.StartsWith(System.IO.Directory.GetCurrentDirectory())) {
+					tbRenderProg.Text = openFileDialog1.FileName.Substring(System.IO.Directory.GetCurrentDirectory().Length + 1);
+				}
+				else {
+					tbRenderProg.Text = openFileDialog1.FileName;
+				}
+			}
+		}
+
+		private void gbInput_DragEnter(object sender, DragEventArgs e) {
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+				e.Effect = DragDropEffects.Move;
+		}
+
+		private void gbInput_DragDrop(object sender, DragEventArgs e) {
+			try {
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				textBox1.Text = files[0];
+				UpdateCmd();
+			}
+			catch { }
 		}
 
 		private void UpdateCmd() {
 			string cmd = getcmd();
-			string file = textBox3.Text;
+			string file = tbRenderProg.Text;
 			if (file.Contains("\\"))
 				file = file.Substring(file.LastIndexOf('\\') + 1);
 			textBox5.Text = file + " " + cmd;
@@ -57,31 +93,30 @@ namespace RA2Maps_GUI {
 			cmd += "-i \"" + textBox1.Text + "\" ";
 			if (PNG.Checked) {
 				cmd += "-p ";
-				if (numericUpDown1.Value != 6)
-					cmd += "-c " + numericUpDown1.Value.ToString() + " ";
+				if (nudCompression.Value != 6)
+					cmd += "-c " + nudCompression.Value.ToString() + " ";
 			}
 
-			if (radioButton2.Checked) cmd += "-o \"" + textBox4.Text + "\" ";
+			if (radioButton2.Checked) cmd += "-o \"" + tbCustomOutput.Text + "\" ";
 			if (checkBox1.Checked) {
 				cmd += "-j ";
 				if (numericUpDown2.Value != 90)
 					cmd += "-q " + numericUpDown2.Value.ToString() + " ";
 			}
 
-			if (textBox2.Text != readmixdir()) cmd += "-m " + "\"" + textBox2.Text + "\" ";
+			if (textBox2.Text != GetMixDir()) cmd += "-m " + "\"" + textBox2.Text + "\" ";
 			if (checkBox3.Checked) cmd += "-r ";
 			if (checkBox2.Checked) cmd += "-s ";
 			if (checkBox4.Checked) cmd += "-S ";
 			if (radioButton3.Checked) cmd += "-Y ";
-			else if (radioButton5.Checked) cmd += "-y ";
+			else if (rbForceRA2.Checked) cmd += "-y ";
 			if (radioButton8.Checked) cmd += "-f ";
 			if (radioButton8.Checked) cmd += "-F ";
-
 
 			return cmd;
 		}
 
-		private string readmixdir() {
+		private string GetMixDir() {
 			try {
 				RegistryKey k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Westwood\\Red Alert 2");
 				string s = (string)k.GetValue("InstallPath");
@@ -102,7 +137,7 @@ namespace RA2Maps_GUI {
 		}
 
 		private void PNG_CheckedChanged(object sender, EventArgs e) {
-			numericUpDown1.Visible = label1.Visible = PNG.Checked;
+			nudCompression.Visible = label1.Visible = PNG.Checked;
 			UpdateCmd();
 		}
 
@@ -119,7 +154,7 @@ namespace RA2Maps_GUI {
 			openFileDialog1.CheckFileExists = true;
 			openFileDialog1.Multiselect = false;
 			openFileDialog1.Filter = "RA2/YR map files (*.map, *.mpr, *.mmx, *.yrm, *.yro)|*.mpr;*.map;*.mmx;*.yrm;*.yro|All files (*.*)|*";
-			openFileDialog1.InitialDirectory = readmixdir();
+			openFileDialog1.InitialDirectory = GetMixDir();
 			openFileDialog1.FileName = "";
 			if (openFileDialog1.ShowDialog() == DialogResult.OK)
 				textBox1.Text = openFileDialog1.FileName;
@@ -152,7 +187,7 @@ namespace RA2Maps_GUI {
 				return;
 			}
 
-			string exepath = textBox3.Text;
+			string exepath = tbRenderProg.Text;
 			if (System.IO.File.Exists(exepath) == false) {
 				try {
 					string oldpath = System.IO.Directory.GetCurrentDirectory();
@@ -175,10 +210,10 @@ namespace RA2Maps_GUI {
 
 			MakeLog();
 			ProcessCmd(exepath);
-
 		}
 
 		bool showlog = false;
+
 		private void MakeLog() {
 			if (showlog)
 				return;
@@ -197,7 +232,6 @@ namespace RA2Maps_GUI {
 			showlog = false;
 		}
 
-
 		private void ProcessCmd(string exepath) {
 			try {
 				Process p = new Process();
@@ -214,7 +248,10 @@ namespace RA2Maps_GUI {
 			}
 		}
 
+		#region logging
+
 		private delegate void logdelegate(string s);
+
 		private void log(string s) {
 			if (InvokeRequired) {
 				Invoke(new logdelegate(log), s);
@@ -226,7 +263,9 @@ namespace RA2Maps_GUI {
 			textBox6.ScrollToCaret();
 		}
 
-		void p_OutputDataReceived(object sender, DataReceivedEventArgs e) {
+		#endregion logging
+
+		private void p_OutputDataReceived(object sender, DataReceivedEventArgs e) {
 			if (e.Data == null) {
 				MessageBox.Show("Your map has been rendered. If your image did not appear, something went wrong. Please sent an email to frank@zzattack.org with your map as an attachment.", "Finished");
 			}
@@ -235,47 +274,8 @@ namespace RA2Maps_GUI {
 			}
 		}
 
-		private void button3_Click(object sender, EventArgs e) {
-			openFileDialog1.CheckFileExists = true;
-			openFileDialog1.Multiselect = false;
-			openFileDialog1.Filter = "Executable (*.exe)|*.exe";
-			openFileDialog1.InitialDirectory = System.IO.Directory.GetCurrentDirectory();
-			openFileDialog1.FileName = "cncmaprender.exe";
-			if (openFileDialog1.ShowDialog() == DialogResult.OK) {
-				if (openFileDialog1.FileName.StartsWith(System.IO.Directory.GetCurrentDirectory())) {
-					textBox3.Text = openFileDialog1.FileName.Substring(System.IO.Directory.GetCurrentDirectory().Length + 1);
-				}
-				else {
-					textBox3.Text = openFileDialog1.FileName;
-				}
-			}
-
-		}
-
-		private void button2_Click(object sender, EventArgs e) {
-			folderBrowserDialog1.Description = "The directory that contains the mix files for RA2/YR.";
-			folderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer;
-			folderBrowserDialog1.SelectedPath = readmixdir();
-			folderBrowserDialog1.ShowNewFolderButton = false;
-			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-				textBox2.Text = folderBrowserDialog1.SelectedPath;
-		}
-
-		private void groupBox3_DragEnter(object sender, DragEventArgs e) {
-
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
-				e.Effect = DragDropEffects.Move;
-		}
-
-		private void groupBox3_DragDrop(object sender, DragEventArgs e) {
-			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-			textBox1.Text = files[0];
+		private void rbsEngine_CheckedChanged(object sender, EventArgs e) {
 			UpdateCmd();
 		}
-
-		private void radioButton4_CheckedChanged(object sender, EventArgs e) {
-			UpdateCmd();
-		}
-
 	}
 }
